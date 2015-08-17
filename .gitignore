@@ -32,4 +32,7 @@
 *.aux
 *.log
 
+#Python
+*.pyc
+
 
