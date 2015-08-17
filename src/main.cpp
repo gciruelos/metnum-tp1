@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "matriz.h"
 
 int main(int argc, char * argv[]){
   /* argv[0] es el nombre del programa
@@ -46,12 +47,12 @@ int main(int argc, char * argv[]){
 
 
 
-  std::cout << "r_i   = " << r_i << std::endl;
-  std::cout << "r_e   = " << r_e << std::endl;
-  std::cout << "m+1   = " << m_mas_uno << std::endl;
-  std::cout << "n     = " << n << std::endl;
-  std::cout << "iso   = " << iso << std::endl;
-  std::cout << "ninst = " << ninst << std::endl;
+  std::cerr << "r_i   = " << r_i << std::endl
+            << "r_e   = " << r_e << std::endl
+            << "m+1   = " << m_mas_uno << std::endl
+            << "n     = " << n << std::endl
+            << "iso   = " << iso << std::endl
+            << "ninst = " << ninst << std::endl;
 
 
   return 0;
