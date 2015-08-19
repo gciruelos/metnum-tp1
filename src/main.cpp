@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "matriz.h"
+#include "sistema.h"
 
 int main(int argc, char * argv[]){
   /* argv[0] es el nombre del programa
@@ -41,8 +42,6 @@ int main(int argc, char * argv[]){
 
   input_file.close();
 
-  /* ACA YA ESTAN TODAS LAS VARIABLES LISTAS PARA SER USADAS */
-
 
 
 
@@ -53,8 +52,6 @@ int main(int argc, char * argv[]){
             << "n     = " << n << std::endl
             << "iso   = " << iso << std::endl
             << "ninst = " << ninst << std::endl;
-
-
   return 0;
 }
 

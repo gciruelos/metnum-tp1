@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 
 class Matriz {
@@ -6,13 +7,27 @@ class Matriz {
 
 public:
   // n = filas, m = columnas
-  Matriz(int n, int m) : N(n), M(m) {
-    // hay que crearla y ponerla toda en 0.0
-  };
+  Matriz(int n, int m, double init) : n_(n), m_(m) {
+    
+		for(int i = 0; i<n; i++){
+			std::vector<double> row;
+			for(int j = 0; j<m; j++){
+				row.push_back(init);
+			}
+			mat.push_back(row);
+		}
+
+  }
 
 
-  // una funcion que la pueda imprimir
-  
+  void mostrar(){
+		for(int i = 0; i<n_; i++){
+			for(int j = 0; j<m_; j++){
+				std::cout << mat[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
+ }
 
   // una funcion que de columnas
   
@@ -24,10 +39,11 @@ public:
   // de tal manera de poder cambiarlos a gusto.
   // ver overload de operator()
   // algo como
-  // const double &operator()(const int &i, const int &j) const
-
-
-  // una funcion que resuelva un sistema que es triangular superior
+  double &operator()(const int &i, const int &j){
+		return mat[i][j];
+	}
+  
+	// una funcion que resuelva un sistema que es triangular superior
   
 
   // una funcion que resuelva un sistema que es triangular inferior
@@ -42,8 +58,8 @@ public:
 
 
 private:
-    int N;
-    int M;
-    // hay que elegir la representacion
+    int n_;
+    int m_;
+    std::vector<std::vector<double> > mat;
 };
 
