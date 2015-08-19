@@ -1,15 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+//#include "sistema.h"
 #include "matriz.h"
-#include "sistema.h"
 
 int main(int argc, char * argv[]){
   /* argv[0] es el nombre del programa
    * argv[1] es el archivo de input
    * argv[2] es el archivo de output
    */
-
+/*
   std::ifstream input_file(argv[1]);
   
   double r_i, r_e;
@@ -44,6 +44,7 @@ int main(int argc, char * argv[]){
 
 
 
+	Sistema s(r_i, r_e, m_mas_uno, n, 500.0, temperaturas_interiores, temperaturas_exteriores, ELIM_GAUSSIANA);
 
 
   std::cerr << "r_i   = " << r_i << std::endl
@@ -52,6 +53,28 @@ int main(int argc, char * argv[]){
             << "n     = " << n << std::endl
             << "iso   = " << iso << std::endl
             << "ninst = " << ninst << std::endl;
-  return 0;
+*/
+
+	Matriz m(3,3,0.0);
+	m(0,0) = 1.0;
+	m(1,1) = 1.0;
+	m(0,1) = 2.0;
+
+	std::vector<double> b(2,0);
+	b[0] = 1;
+	b[1] = 1;
+
+	std::vector<double> x = m.backward_subst(b);
+
+	for(int i = 0; i<x.size(); i++){
+		std::cout << x[i] << " ";
+	}
+	std::cout << std::endl;
+
+
+
+
+
+return 0;
 }
 

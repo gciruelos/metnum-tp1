@@ -43,8 +43,23 @@ public:
 		return mat[i][j];
 	}
   
-	// una funcion que resuelva un sistema que es triangular superior
-  
+	//Pre: A es triangular superior
+	std::vector<double> backward_subst(std::vector<double> b){
+
+		int n = b.size();
+		std::vector<double> x(n, 0.0);
+	
+		  for(int k = n-1; k>=0; k--){
+				double numer = b[k];
+				for(int i = k+1; i<n; i++){
+					numer -= (*this)(k, i) * x[i];
+				}
+				x[k] = numer / (*this)(k,k);
+			}
+		return x;
+	}
+
+
 
   // una funcion que resuelva un sistema que es triangular inferior
 
