@@ -100,7 +100,9 @@ public:
         }
         //modifico b
         b[fila] -= b[i] * prim / gauss(i,i);
-          
+        
+        std::cerr << gauss(i,i) << std::endl;
+
         gauss(fila, i) = 0;
       }
 

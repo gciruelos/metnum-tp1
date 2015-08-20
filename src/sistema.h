@@ -1,6 +1,9 @@
 #include "matriz.h"
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <iostream>
+
 /* aca van a estar las funciones wrapper de las funciones de matriz.h
  *
  *
@@ -24,28 +27,19 @@ class Sistema{
 
 public:
   /* acordate de init */
-  Sistema(double r_i, double r_e, int m_mas_uno, int n, double isoterma, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores, enum metodo met ) {
+  Sistema(double r_i, double r_e, int m_mas_uno, int n, double isoterma, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores, std::ofstream& output_file, enum metodo met ) {
 		/* armo el sistema */
 
 		n_ = n;
 		m_mas_uno_ = m_mas_uno;
 		int fila = 0;
-
-    r_i_ = r_i;
-    delta_r = (r_e - r_i)/m_mas_uno;
-    delta_tita = 2 * 3.14 / n;
-    //                      ^ cabeza
-	  
       
     A = new Matriz(n*m_mas_uno, n*m_mas_uno, 0.0);
 		for(int i = 0; i<n; i++, fila++){
 			(*A)(fila, fila) = 1.0;
 		}
 
-
-
-
-  //Precomputo varias ctes 
+    // Precomputo varias ctes 
     double d_r = (r_e - r_i) / (m_mas_uno - 1); // delta r
     double qd_r = d_r * d_r;          // (delta r)²
     double iqd_r = 1/qd_r;            // 1/(delta r)²
@@ -100,11 +94,9 @@ public:
       fila++;
     }
 		
-for(int i = 0; i<n; i++, fila++){
+    for(int i = 0; i<n; i++, fila++){
 			(*A)(fila, fila) = 1.0;
 		}
-		//A->mostrar();
-
 
     // armo b's
     int cant_bs = temps_interiores.size();
@@ -118,34 +110,24 @@ for(int i = 0; i<n; i++, fila++){
       }
       bs.push_back(b);
     }
-/*
-    for(int i = 0; i<bs.size(); i++){
-      std::cout << "b_" << i<< " = ";
-      for(int j = 0; j<bs[0].size(); j++){
-        std::cout << bs[i][j] << " ";
-      }
-      std::cout << std::endl;
-    }
-*/
-/*
+
+    
+    if(met == ELIM_GAUSSIANA){
+			for(int i = 0; i<bs.size(); i++){
+        std::vector<double> b = bs[i];
+        std::vector<double> x = A->gaussian_elim(b);
+        for(int j = 0; j<x.size(); j++){
+          output_file << x[j] << std::endl;
+        }
+			}
+		}
+    /*
 		if(metodo == FACTORIZACION_LU){
 			Matriz L,U = dame_factorizacion_lu(A);
 			for(adsf in temeraturas)
 				resolv
 				resolver;
 		}*/
-    if(met == ELIM_GAUSSIANA){
-			for(int i = 0; i<bs.size(); i++){
-        std::vector<double> b = bs[i];
-        std::vector<double> x = A->gaussian_elim(b);
-
-        for(int j = 0; j<x.size(); j++){
-          std::cout << x[j] << std::endl;
-        }
-
-			}
-		}
-
 
 }
 
@@ -162,13 +144,4 @@ private:
 	int col_matriz(int i, int j){
 		return j+n_*i;
 	}
-
-  double get_r(int radio_i){
-    return r_i_ + delta_r * radio_i;
-  }
-
-  double get_tita(int tita_i){
-    return delta_tita * tita_i;
-  }
-
 };

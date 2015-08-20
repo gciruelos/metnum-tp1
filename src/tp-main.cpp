@@ -43,8 +43,9 @@ int main(int argc, char * argv[]){
   input_file.close();
 
 
-
-	Sistema s(r_i, r_e, m_mas_uno, n, 500.0, temperaturas_interiores, temperaturas_exteriores, ELIM_GAUSSIANA);
+  std::ofstream output_file(argv[2], std::ofstream::out);
+	Sistema s(r_i, r_e, m_mas_uno, n, 500.0, temperaturas_interiores, temperaturas_exteriores, output_file, ELIM_GAUSSIANA);
+  output_file.close();
 
 /*
   std::cerr << "r_i   = " << r_i << std::endl
