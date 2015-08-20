@@ -1,3 +1,6 @@
+#ifndef MATRIZ_H
+#define MATRIZ_H
+
 #include <vector>
 #include <iostream>
 
@@ -78,3 +81,4 @@ private:
     std::vector<std::vector<double> > mat;
 };
 
+#endif

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-//#include "sistema.h"
+#include "sistema.h"
 #include "matriz.h"
 
 int main(int argc, char * argv[]){
@@ -9,7 +9,7 @@ int main(int argc, char * argv[]){
    * argv[1] es el archivo de input
    * argv[2] es el archivo de output
    */
-/*
+
   std::ifstream input_file(argv[1]);
   
   double r_i, r_e;
@@ -53,7 +53,7 @@ int main(int argc, char * argv[]){
             << "n     = " << n << std::endl
             << "iso   = " << iso << std::endl
             << "ninst = " << ninst << std::endl;
-*/
+
 
 	Matriz m(3,3,0.0);
 	m(0,0) = 1.0;

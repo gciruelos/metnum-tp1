@@ -1,5 +1,9 @@
+#ifndef SISTEMA_H
+#define SISTEMA_H
+
 #include "matriz.h"
 #include <vector>
+#include <math.h>
 /* aca van a estar las funciones wrapper de las funciones de matriz.h
  *
  *
@@ -30,50 +34,64 @@ public:
 		m_mas_uno_ = m_mas_uno;
 		int fila = 0;
 
-	  A = new Matriz(n*m_mas_uno, n*m_mas_uno, 0.0);
+		A = new Matriz(n*m_mas_uno, n*m_mas_uno, 0.0);
 		for(int i = 0; i<n; i++, fila++){
 			(*A)(fila, fila) = 1.0;
 		}
 
-		for(int i = 1; i<=m_mas_uno-2; i++){ // m_mas_uno-2 = cantidad de
-			int j = 0;                         // radios salvo interior y exterior
+		//Precomputo varias ctes 
+		double d_r = (r_e - r_i) / (m_mas_uno - 1); // delta r
+		double qd_r = d_r * d_r;					// (delta r)²
+		double iqd_r = 1/qd_r;						// 1/(delta r)²
+		double d_theta = (2*M_PI) / n; 				// delta theta
+		double qd_theta = d_theta * d_theta; 		// (delta theta)²
+		double iqd_theta = 1/qd_theta; 				// 1/(delta theta)²
+
+		for(int i = 1; i<=m_mas_uno-2; i++){ 		// m_mas_uno-2 = cant radios
+			double r = r_i + i*d_r;
+			double qr = r*r;
+			double cociente = (qr * qd_r * qd_theta);
+			double coef_ij = (r * d_r * qd_theta - 2*qr*qd_theta - 2*qd_r) / cociente;
+			double coef_i = (1/qr) * iqd_theta;
+			double coef_j = (r - d_r)/(r * qd_r);
+
+			int j = 0;                         		// salvo interior y exterior
 			
 			//resuelvo primer caso aparte;	
-			(*A)(fila, col_matriz(i, j)) = 8.0;  // el mismo
+			// el mismo
+			(*A)(fila, col_matriz(i, j)) = coef_ij;  	
 			
-			(*A)(fila, col_matriz(i, j+1)) = 8.0;  // el siguiente
-			(*A)(fila, col_matriz(i, n_-1)) = 8.0; // el anterior, que es el ultimo
+			(*A)(fila, col_matriz(i, j+1)) = coef_i;  	// el siguiente
+			(*A)(fila, col_matriz(i, n_-1)) = coef_i; 	// el anterior, que es el ultimo
 
-			(*A)(fila, col_matriz(i-1, j)) = 8.0; // anterior nivel
-			(*A)(fila, col_matriz(i+1, j)) = 8.0; // siguiente nivel
+			(*A)(fila, col_matriz(i-1, j)) = coef_j; 	// anterior nivel
+			(*A)(fila, col_matriz(i+1, j)) = iqd_r; 	// siguiente nivel
 
 			j++; fila++;
 
-			
-			
 			// resuelvo todos los casos "buenos" juntos
 			for(; j<n-1; j++, fila++){
-				(*A)(fila, col_matriz(i, j)) = 8.0;
+				(*A)(fila, col_matriz(i, j)) = coef_ij;
 				
-				(*A)(fila, col_matriz(i, j+1)) = 8.0;
-				(*A)(fila, col_matriz(i, j-1)) = 8.0;
+				(*A)(fila, col_matriz(i, j+1)) = coef_i;
+				(*A)(fila, col_matriz(i, j-1)) = coef_i;
 
-				(*A)(fila, col_matriz(i-1, j)) = 8.0;
-				(*A)(fila, col_matriz(i+1, j)) = 8.0;
+				(*A)(fila, col_matriz(i-1, j)) = coef_j;
+				(*A)(fila, col_matriz(i+1, j)) = iqd_r;
 			}
 
 			
 			// resuelvo caso final aparte
-			(*A)(fila, col_matriz(i, j)) = 8.0;  // el mismo
+			(*A)(fila, col_matriz(i, j)) = coef_ij;
 			
-			(*A)(fila, col_matriz(i, 0)) = 8.0;  // el siguiente, que es el primero
-			(*A)(fila, col_matriz(i, j-1)) = 8.0; // el anterior
+			(*A)(fila, col_matriz(i, 0)) = coef_i;  // el siguiente, que es el primero
+			(*A)(fila, col_matriz(i, j-1)) = coef_i; // el anterior
 
-			(*A)(fila, col_matriz(i-1, j)) = 8.0; // anterior nivel
-			(*A)(fila, col_matriz(i+1, j)) = 8.0; // siguiente nivel
+			(*A)(fila, col_matriz(i-1, j)) = coef_j; // anterior nivel
+			(*A)(fila, col_matriz(i+1, j)) = iqd_r; // siguiente nivel
 
-
-			j++; fila++;
+			//j++;
+			fila++;
 		}
 					
 		for(int i = 0; i<n; i++, fila++){
@@ -105,10 +123,10 @@ private:
 
 	std::vector<std::vector<double> > bs;
 
-
-	
 	int col_matriz(int i, int j){
 		return j+n_*i;
 	}
 
 };
+
+#endif
