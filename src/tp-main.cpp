@@ -44,7 +44,7 @@ int main(int argc, char * argv[]){
 
 
   std::ofstream output_file(argv[2], std::ofstream::out);
-	Sistema s(r_i, r_e, m_mas_uno, n, 500.0, temperaturas_interiores, temperaturas_exteriores, output_file, ELIM_GAUSSIANA);
+  Sistema s(r_i, r_e, m_mas_uno, n, 500.0, temperaturas_interiores, temperaturas_exteriores, output_file, ELIM_GAUSSIANA);
   output_file.close();
 
 /*
@@ -57,24 +57,24 @@ int main(int argc, char * argv[]){
 */
 /*
 
-	Matriz m(3,3,0.0);
-	m(0,0) = 1.0;
-	m(1,1) = 3.0;
-	m(1,0) = 1.0;
-	m(0,1) = 1.0;
-	m(2,2) = 1.0;
+  Matriz m(3,3,0.0);
+  m(0,0) = 1.0;
+  m(1,1) = 3.0;
+  m(1,0) = 1.0;
+  m(0,1) = 1.0;
+  m(2,2) = 1.0;
 
-	std::vector<double> b(3,0);
-	b[0] = 1;
-	b[1] = 1;
-	b[2] = 1;
+  std::vector<double> b(3,0);
+  b[0] = 1;
+  b[1] = 1;
+  b[2] = 1;
 
-	std::vector<double> x = m.gaussian_elim(b);
+  std::vector<double> x = m.gaussian_elim(b);
 
-	for(int i = 0; i<x.size(); i++){
-		std::cout << x[i] << " ";
-	}
-	std::cout << std::endl;
+  for(int i = 0; i<x.size(); i++){
+    std::cout << x[i] << " ";
+  }
+  std::cout << std::endl;
 
 
 */

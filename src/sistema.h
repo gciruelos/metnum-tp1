@@ -15,8 +15,8 @@
 
 
 enum metodo{
-	ELIM_GAUSSIANA,
-	FACTORIZACION_LU
+  ELIM_GAUSSIANA,
+  FACTORIZACION_LU
 };
 
 
@@ -28,16 +28,16 @@ class Sistema{
 public:
   /* acordate de init */
   Sistema(double r_i, double r_e, int m_mas_uno, int n, double isoterma, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores, std::ofstream& output_file, enum metodo met ) {
-		/* armo el sistema */
+    /* armo el sistema */
 
-		n_ = n;
-		m_mas_uno_ = m_mas_uno;
-		int fila = 0;
+    n_ = n;
+    m_mas_uno_ = m_mas_uno;
+    int fila = 0;
 
     A = new Matriz(n*m_mas_uno, n*m_mas_uno, 0.0);
-		for(int i = 0; i<n; i++, fila++){
-			(*A)(fila, fila) = 1.0;
-		}
+    for(int i = 0; i<n; i++, fila++){
+      (*A)(fila, fila) = 1.0;
+    }
 
     // Precomputo varias ctes 
     double d_r = (r_e - r_i) / (m_mas_uno - 1); // delta r
@@ -93,10 +93,10 @@ public:
       //j++;
       fila++;
     }
-		
+    
     for(int i = 0; i<n; i++, fila++){
-			(*A)(fila, fila) = 1.0;
-		}
+      (*A)(fila, fila) = 1.0;
+    }
 
     // armo b's
     int cant_bs = temps_interiores.size();
@@ -113,35 +113,35 @@ public:
 
     
     if(met == ELIM_GAUSSIANA){
-			for(int i = 0; i<bs.size(); i++){
+      for(int i = 0; i<bs.size(); i++){
         std::vector<double> b = bs[i];
         std::vector<double> x = A->gaussian_elim(b);
         for(int j = 0; j<x.size(); j++){
           output_file << x[j] << std::endl;
         }
-			}
-		}
+      }
+    }
     /*
-		if(metodo == FACTORIZACION_LU){
-			Matriz L,U = dame_factorizacion_lu(A);
-			for(adsf in temeraturas)
-				resolv
-				resolver;
-		}*/
+    if(metodo == FACTORIZACION_LU){
+      Matriz L,U = dame_factorizacion_lu(A);
+      for(adsf in temeraturas)
+        resolv
+        resolver;
+    }*/
 
 }
 
 
 private:
-	int m_mas_uno_, n_;
-	Matriz * A;
+  int m_mas_uno_, n_;
+  Matriz * A;
 
-	std::vector<std::vector<double> > bs;
+  std::vector<std::vector<double> > bs;
 
   double r_i_, delta_r, delta_tita;
 
-	
-	int col_matriz(int i, int j){
-		return j+n_*i;
-	}
+  
+  int col_matriz(int i, int j){
+    return j+n_*i;
+  }
 };
