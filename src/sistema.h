@@ -23,15 +23,12 @@ enum metodo{
 
 
 
-
 class Sistema{
 
 public:
   /* acordate de init */
-  Sistema(double r_i, double r_e, int m_mas_uno, int n, double isoterma, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores) {
-    /* armo el sistema */
-
-
+  Sistema(double r_i, double r_e, int m_mas_uno, int n, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores) {
+ 
     n_ = n;
     m_mas_uno_ = m_mas_uno;
    
@@ -62,9 +59,8 @@ public:
 
       int j = 0;                            // salvo interior y exterior
       
-      //resuelvo primer caso aparte;  
-      // el mismo
-      (*A)(fila, col_matriz(i, j)) = coef_ij;   
+      // resuelvo primer caso aparte;   
+      (*A)(fila, col_matriz(i, j)) = coef_ij;   // el mismo   
       
       (*A)(fila, col_matriz(i, j+1)) = coef_i;    // el siguiente
       (*A)(fila, col_matriz(i, n_-1)) = coef_i;   // el anterior, que es el ultimo
@@ -87,7 +83,7 @@ public:
 
       
       // resuelvo caso final aparte
-      (*A)(fila, col_matriz(i, j)) = coef_ij;
+      (*A)(fila, col_matriz(i, j)) = coef_ij; // el mismo
       
       (*A)(fila, col_matriz(i, 0)) = coef_i;  // el siguiente, que es el primero
       (*A)(fila, col_matriz(i, j-1)) = coef_i; // el anterior
@@ -95,7 +91,7 @@ public:
       (*A)(fila, col_matriz(i-1, j)) = coef_j; // anterior nivel
       (*A)(fila, col_matriz(i+1, j)) = iqd_r; // siguiente nivel
 
-      //j++;
+      j++;
       fila++;
     }
     
@@ -123,7 +119,7 @@ public:
 
   }
 
-  void solve(std::ofstream& output_file, enum metodo met){ 
+  void solve(std::ofstream& output_file, enum metodo met, double isoterma){ 
     if(met == ELIM_GAUSSIANA){
       std::cerr << "Resolviendo mediante eliminacion gaussiana..." << std::endl;
       for(int i = 0; i<bs.size(); i++){
@@ -136,7 +132,6 @@ public:
         std::cerr << "ok" << std::endl;
       }
     }
-    
     else if(met == FACTORIZACION_LU){
       std::pair<Matriz*,Matriz*> LU = A->LU_fact();
       Matriz * L = LU.first;

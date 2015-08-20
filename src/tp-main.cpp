@@ -43,40 +43,13 @@ int main(int argc, char * argv[]){
   input_file.close();
 
 
+  // ACA YA ESTA TODO LISTO PARA SER USADO
+
   std::ofstream output_file(argv[2], std::ofstream::out);
-  Sistema s(r_i, r_e, m_mas_uno, n, 500.0, temperaturas_interiores, temperaturas_exteriores);
-  s.solve(output_file, FACTORIZACION_LU);
+  Sistema s(r_i, r_e, m_mas_uno, n, temperaturas_interiores, temperaturas_exteriores);
+  s.solve(output_file, ELIM_GAUSSIANA, 500.0);
   output_file.close();
 
-/*
-  std::cerr << "r_i   = " << r_i << std::endl
-            << "r_e   = " << r_e << std::endl
-            << "m+1   = " << m_mas_uno << std::endl
-            << "n     = " << n << std::endl
-            << "iso   = " << iso << std::endl
-            << "ninst = " << ninst << std::endl;
-*/
-/*
-
-  Matriz m(3,3,0.0);
-  m(0,0) = 2.0;
-  m(0,1) = 3.0;
-  m(0,2) = 8.0;
-  
-  m(1,0) = 4.0;
-  m(1,1) = 5.0;
-  m(1,2) = 1.0;
-
-  m(2,0) = 6.0;
-  m(2,1) = 1.0;
-  m(2,2) = 2.0;
-  
-  m.mostrar();
-
-  std::pair<Matriz*,Matriz*> LU = m.LU_fact();
-  LU.first->mostrar();
-  LU.second->mostrar();
-*/
-return 0;
+  return 0;
 }
 

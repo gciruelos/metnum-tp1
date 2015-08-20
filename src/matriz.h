@@ -35,16 +35,16 @@ public:
       std::cout << std::endl;
  }
 
-  // una funcion que de columnas
-  
+  int columnas(){
+    return m_;
+  }
 
-  // una funcion que de filas
+  int filas(){
+    return n_;
+  }
   
-
-  // una funcion que devuelva referencia a un coeficiente de la matriz
-  // de tal manera de poder cambiarlos a gusto.
-  // ver overload de operator()
-  // algo como
+  // esta funcion nos permite asignar y obtener los coeficientes
+  // de la matriz
   double &operator()(const int &i, const int &j){
     return mat[i][j];
   }
@@ -97,11 +97,11 @@ public:
         for(int j = i+1; j<n; j++){ 
           gauss(fila, j) -= gauss(i, j) * coeff;
         }
-        //modifico b
-        b[fila] -= b[i] * coeff;
         gauss(fila, i) = 0.0;
-      }
-      //std::cerr << "\t\tTriangulada " << i << "-esima columna" << std::endl;
+        
+        //modifico b
+        b[fila] -= b[i] * coeff; 
+      } 
     }
 
     // es triangular superior, aplicamos backward substitution
@@ -132,22 +132,10 @@ public:
         // pongo el valor correspondiente en L
         (*L)(fila, i) = coeff;
       }
-      (*L)(i,i) = 1.0;
-      //std::cerr << "\t\tTriangulada " << i << "-esima columna" << std::endl;
+      (*L)(i,i) = 1.0; 
     }
-
-    
-
     return std::make_pair(L, U);
-
-
-
   }
-
-  // una funcion que devuelva un par de matrices  std::pair<Matriz,Matriz>(L,U),
-  // (que sean la descomposicion LU)
-
-
 
 private:
     int n_;
