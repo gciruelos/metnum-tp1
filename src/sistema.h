@@ -31,10 +31,14 @@ public:
   Sistema(double r_i, double r_e, int m_mas_uno, int n, double isoterma, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores) {
     /* armo el sistema */
 
+
     n_ = n;
     m_mas_uno_ = m_mas_uno;
-    int fila = 0;
+   
 
+    std::cerr << "Armando el sistema... " << std::flush;
+    
+    int fila = 0;
     A = new Matriz(n*m_mas_uno, n*m_mas_uno, 0.0);
     for(int i = 0; i<n; i++, fila++){
       (*A)(fila, fila) = 1.0;
@@ -98,7 +102,11 @@ public:
     for(int i = 0; i<n; i++, fila++){
       (*A)(fila, fila) = 1.0;
     }
+    
+    std::cerr << "ok" << std::endl;
 
+
+    std::cerr << "Armando b's... " << std::flush;
     // armo b's
     int cant_bs = temps_interiores.size();
     for(int i = 0; i<cant_bs; i++){
@@ -111,28 +119,46 @@ public:
       }
       bs.push_back(b);
     }
+    std::cerr << "ok" << std::endl;
 
   }
 
   void solve(std::ofstream& output_file, enum metodo met){ 
     if(met == ELIM_GAUSSIANA){
+      std::cerr << "Resolviendo mediante eliminacion gaussiana..." << std::endl;
       for(int i = 0; i<bs.size(); i++){
+        std::cerr << "\tSistema " << i << "... " << std::flush;
         std::vector<double> b = bs[i];
         std::vector<double> x = A->gaussian_elim(b);
         for(int j = 0; j<x.size(); j++){
           output_file << std::fixed << std::setprecision(8) << x[j] << std::endl;
         }
+        std::cerr << "ok" << std::endl;
       }
     }
-    /*
-    if(metodo == FACTORIZACION_LU){
-      Matriz L,U = dame_factorizacion_lu(A);
-      for(adsf in temeraturas)
-        resolv
-        resolver;
-    }*/
+    
+    else if(met == FACTORIZACION_LU){
+      std::pair<Matriz*,Matriz*> LU = A->LU_fact();
+      Matriz * L = LU.first;
+      Matriz * U = LU.second;
+
+      for(int i = 0; i<bs.size(); i++){
+        std::cerr << "\tSistema " << i << "... " << std::flush;
+        std::vector<double> b = bs[i];
+        // Ax = b  -> LUx = b  -> Ly = b, donde Ux = y
+        std::vector<double> y = L->forward_subst(b);
+        std::vector<double> x = U->backward_subst(y);
+        for(int j = 0; j<x.size(); j++){
+          output_file << std::fixed << std::setprecision(8) << x[j] << std::endl;
+        }
+        std::cerr << "ok" << std::endl;
+      }
+    }
   }
 
+  ~Sistema(){
+    delete A;
+  }
 
 private:
   int m_mas_uno_, n_;

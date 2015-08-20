@@ -1,6 +1,6 @@
 #include <vector>
 #include <iostream>
-
+#include <utility> // std::pair
 
 class Matriz {
 
@@ -101,12 +101,48 @@ public:
         b[fila] -= b[i] * coeff;
         gauss(fila, i) = 0.0;
       }
+      //std::cerr << "\t\tTriangulada " << i << "-esima columna" << std::endl;
     }
 
     // es triangular superior, aplicamos backward substitution
     return  gauss.backward_subst(b);
   }
 
+
+  std::pair<Matriz *, Matriz *> LU_fact(){
+    Matriz * U = new Matriz(this);
+    Matriz * L = new Matriz(this->n_, this->m_, 0);
+
+    int n = n_;
+
+    // muy parecida a la eliminacion gaussiana, un poco cambiada
+    for(int i = 0; i<n; i++){
+      for(int fila = i+1; fila < n; fila++){
+        // modifico la fila 
+        // f_j - cte_fila * f_i 
+        // cte_fila = prim/a_ii, donde prim es el primero de la fila
+        double prim = (*U)(fila,i);
+       
+        double coeff = prim/(*U)(i,i);
+        for(int j = i+1; j<n; j++){ 
+          (*U)(fila, j) -= (*U)(i, j) * coeff;
+        }
+        (*U)(fila, i) = 0.0;
+        
+        // pongo el valor correspondiente en L
+        (*L)(fila, i) = coeff;
+      }
+      (*L)(i,i) = 1.0;
+      //std::cerr << "\t\tTriangulada " << i << "-esima columna" << std::endl;
+    }
+
+    
+
+    return std::make_pair(L, U);
+
+
+
+  }
 
   // una funcion que devuelva un par de matrices  std::pair<Matriz,Matriz>(L,U),
   // (que sean la descomposicion LU)

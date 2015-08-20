@@ -45,7 +45,7 @@ int main(int argc, char * argv[]){
 
   std::ofstream output_file(argv[2], std::ofstream::out);
   Sistema s(r_i, r_e, m_mas_uno, n, 500.0, temperaturas_interiores, temperaturas_exteriores);
-  s.solve(output_file, ELIM_GAUSSIANA);
+  s.solve(output_file, FACTORIZACION_LU);
   output_file.close();
 
 /*
@@ -59,28 +59,24 @@ int main(int argc, char * argv[]){
 /*
 
   Matriz m(3,3,0.0);
-  m(0,0) = 1.0;
-  m(1,1) = 3.0;
-  m(1,0) = 1.0;
-  m(0,1) = 1.0;
-  m(2,2) = 1.0;
+  m(0,0) = 2.0;
+  m(0,1) = 3.0;
+  m(0,2) = 8.0;
+  
+  m(1,0) = 4.0;
+  m(1,1) = 5.0;
+  m(1,2) = 1.0;
 
-  std::vector<double> b(3,0);
-  b[0] = 1;
-  b[1] = 1;
-  b[2] = 1;
+  m(2,0) = 6.0;
+  m(2,1) = 1.0;
+  m(2,2) = 2.0;
+  
+  m.mostrar();
 
-  std::vector<double> x = m.gaussian_elim(b);
-
-  for(int i = 0; i<x.size(); i++){
-    std::cout << x[i] << " ";
-  }
-  std::cout << std::endl;
-
-
+  std::pair<Matriz*,Matriz*> LU = m.LU_fact();
+  LU.first->mostrar();
+  LU.second->mostrar();
 */
-
-
 return 0;
 }
 
