@@ -3,6 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 /* aca van a estar las funciones wrapper de las funciones de matriz.h
  *
@@ -40,7 +41,7 @@ public:
     }
 
     // Precomputo varias ctes 
-    double d_r = (r_e - r_i) / (m_mas_uno - 1); // delta r
+    double d_r = (r_e - r_i) / (m_mas_uno -1); // delta r
     double qd_r = d_r * d_r;          // (delta r)²
     double iqd_r = 1/qd_r;            // 1/(delta r)²
     double d_theta = (2*M_PI) / n;        // delta theta
@@ -117,7 +118,7 @@ public:
         std::vector<double> b = bs[i];
         std::vector<double> x = A->gaussian_elim(b);
         for(int j = 0; j<x.size(); j++){
-          output_file << x[j] << std::endl;
+          output_file << std::fixed << std::setprecision(8) << x[j] << std::endl;
         }
       }
     }

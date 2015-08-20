@@ -92,13 +92,14 @@ public:
         // f_j - cte_fila * f_i 
         // cte_fila = prim/a_ii, donde prim es el primero de la fila
         double prim = gauss(fila,i);
-        
+       
+        double coeff = prim/gauss(i,i);
         for(int j = i+1; j<n; j++){ 
-          gauss(fila, j) -= gauss(i, j) * (prim / gauss(i,i));
+          gauss(fila, j) -= gauss(i, j) * coeff;
         }
         //modifico b
-        b[fila] -= b[i] * (prim / gauss(i,i));
-        gauss(fila, i) = 0;
+        b[fila] -= b[i] * coeff;
+        gauss(fila, i) = 0.0;
       }
     }
 
