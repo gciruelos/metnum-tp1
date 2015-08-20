@@ -33,7 +33,7 @@ public:
 		n_ = n;
 		m_mas_uno_ = m_mas_uno;
 		int fila = 0;
-      
+
     A = new Matriz(n*m_mas_uno, n*m_mas_uno, 0.0);
 		for(int i = 0; i<n; i++, fila++){
 			(*A)(fila, fila) = 1.0;

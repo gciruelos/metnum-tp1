@@ -49,12 +49,13 @@ public:
 		return mat[i][j];
 	}
   
+
 	//Pre: A es triangular superior y no tiene ceros en la diagonal
 	std::vector<double> backward_subst(std::vector<double> b){
-
 		int n = b.size();
 		std::vector<double> x(n, 0.0);
-		for(int k = n-1; k>=0; k--){
+		
+    for(int k = n-1; k>=0; k--){
 			double numer = b[k];
 			for(int i = k+1; i<n; i++){
 				numer -= (*this)(k, i) * x[i];
@@ -67,7 +68,6 @@ public:
 
 	//Pre: A es triangular inferior y no tiene ceros en la diagonal
 	std::vector<double> forward_subst(std::vector<double> b){
-
 		int n = b.size();
 		std::vector<double> x(n, 0.0);
 	
@@ -81,11 +81,9 @@ public:
 		return x;
 	}
 
+
 	std::vector<double> gaussian_elim(std::vector<double> b){
-
 		int n = b.size();
-		std::vector<double> x(n, 0.0);
-
     Matriz gauss(this);
 
 		for(int i = 0; i<n; i++){
@@ -96,29 +94,17 @@ public:
         double prim = gauss(fila,i);
         
         for(int j = i+1; j<n; j++){ 
-          gauss(fila, j) -= gauss(i, j) * prim / gauss(i,i);
+          gauss(fila, j) -= gauss(i, j) * (prim / gauss(i,i));
         }
         //modifico b
-        b[fila] -= b[i] * prim / gauss(i,i);
-        
-        std::cerr << gauss(i,i) << std::endl;
-
+        b[fila] -= b[i] * (prim / gauss(i,i));
         gauss(fila, i) = 0;
       }
-
-      //gauss.mostrar();
-
     }
 
-   
-
-    //gauss.mostrar();
-
+    // es triangular superior, aplicamos backward substitution
     return  gauss.backward_subst(b);
-
 	}
-
-  // una funcion que triangule la matriz usando gauss jordan
 
 
   // una funcion que devuelva un par de matrices  std::pair<Matriz,Matriz>(L,U),
