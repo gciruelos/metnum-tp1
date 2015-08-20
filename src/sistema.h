@@ -28,7 +28,7 @@ class Sistema{
 
 public:
   /* acordate de init */
-  Sistema(double r_i, double r_e, int m_mas_uno, int n, double isoterma, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores, std::ofstream& output_file, enum metodo met ) {
+  Sistema(double r_i, double r_e, int m_mas_uno, int n, double isoterma, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores) {
     /* armo el sistema */
 
     n_ = n;
@@ -112,7 +112,9 @@ public:
       bs.push_back(b);
     }
 
-    
+  }
+
+  void solve(std::ofstream& output_file, enum metodo met){ 
     if(met == ELIM_GAUSSIANA){
       for(int i = 0; i<bs.size(); i++){
         std::vector<double> b = bs[i];
@@ -129,8 +131,7 @@ public:
         resolv
         resolver;
     }*/
-
-}
+  }
 
 
 private:
