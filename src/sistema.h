@@ -183,10 +183,18 @@ public:
         isos.push_back(iso);
         if(f_isotermas.is_open()) f_isotermas << iso << std::endl;
       }
-
-      // aca habria que evaluar la isoterma, y dar el "resultado",
-      // o sea, si se va a romper el alto horno o no.
-
+      //Analizo si la isoterma supera algun umbral peligroso.
+      double med = media(isos);
+      double prom = promedio(isos);
+      double max = maximo(isos);
+      
+      double umbral_med = 1000;
+      double umbral_prom = 1000;
+      double umbral_max = 1200;
+      
+      if (med > umbral_med || prom > umbral_prom || max > umbral_max){
+		    std::cerr << "La isoterma del sistema numero" << s << "esta en peligro" << std::flush;
+      }
     }
   }
 
@@ -239,6 +247,36 @@ private:
       }
     }
   }
+  
+  double media(std::vector<double> v){
+    double aux;
+    for(int i = 0; i < v.size(); i++)
+      for(int j = i; j < v.size(); j++){
+        if(v[i] > v[i+1])
+            aux = v[i];
+            v[i] = v[i+1];
+            v[i+1] = aux;
+      }  
+    return v[v.size()/2];    
+  }
+  
+  double promedio(std::vector<double> v){
+  	double res;
+  	for(int i = 0; i < v.size(); i++){
+  		res = res + v[i];
+  		}
+  	res = res/(v.size());
+  	return res;
+  }
 
+  double maximo(std::vector<double> v){
+  	double res = 0;
+  	for(int i = 0; i<v.size(); i++){
+  		if(res < v[i]){
+  			res = v[i];
+  			}
+  		}
+  	return res;
+  }
 
 };
