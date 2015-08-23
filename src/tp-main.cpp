@@ -7,11 +7,15 @@
 int main(int argc, char * argv[]){
   /* argv[0] es el nombre del programa
    * argv[1] es el archivo de input
-   * argv[2] es el archivo de output
+   * argv[2] es el archivo de output soluciones
+   * argv[3] es el archivo de output isoterma (opcional)
    */
 
   std::ifstream input_file(argv[1]);
-  
+
+
+  std::cout << argc << std::endl;
+
   double r_i, r_e;
   unsigned int m_mas_uno, n;
   double iso;
@@ -45,10 +49,18 @@ int main(int argc, char * argv[]){
 
   // ACA YA ESTA TODO LISTO PARA SER USADO
 
-  std::ofstream output_file(argv[2], std::ofstream::out);
+  std::ofstream f_soluciones(argv[2], std::ofstream::out);
+  
+  std::ofstream f_isotermas;
+  if(argc>3){
+    f_isotermas.open(argv[3], std::ofstream::out);
+  }
+  
   Sistema s(r_i, r_e, m_mas_uno, n, temperaturas_interiores, temperaturas_exteriores);
-  s.solve(output_file, ELIM_GAUSSIANA, 500.0);
-  output_file.close();
+  s.solve(f_soluciones, FACTORIZACION_LU);
+  s.isotermas(f_isotermas, iso);
+  
+  f_soluciones.close();
 
   return 0;
 }

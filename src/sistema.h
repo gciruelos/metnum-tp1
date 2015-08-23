@@ -27,11 +27,17 @@ class Sistema{
 
 public:
   /* acordate de init */
-  Sistema(double r_i, double r_e, int m_mas_uno, int n, std::vector<std::vector<double> > temps_interiores, std::vector<std::vector<double> > temps_exteriores) {
+  Sistema(double r_i,
+          double r_e,
+          int m_mas_uno,
+          int n,
+          std::vector<std::vector<double> > temps_interiores,
+          std::vector<std::vector<double> > temps_exteriores) {
  
     n_ = n;
     m_mas_uno_ = m_mas_uno;
-   
+    r_i_ = r_i;
+    delta_r = (r_e-r_i)/m_mas_uno;
 
     std::cerr << "Armando el sistema... " << std::flush;
     
@@ -42,14 +48,14 @@ public:
     }
 
     // Precomputo varias ctes 
-    double d_r = (r_e - r_i) / (m_mas_uno -1); // delta r
-    double qd_r = d_r * d_r;          // (delta r)²
-    double iqd_r = 1/qd_r;            // 1/(delta r)²
-    double d_theta = (2*M_PI) / n;        // delta theta
-    double qd_theta = d_theta * d_theta;    // (delta theta)²
-    double iqd_theta = 1/qd_theta;        // 1/(delta theta)²
+    double d_r = (r_e - r_i) / (m_mas_uno -1);  // delta r
+    double qd_r = d_r * d_r;                    // (delta r)²
+    double iqd_r = 1/qd_r;                      // 1/(delta r)²
+    double d_theta = (2*M_PI) / n;              // delta theta
+    double qd_theta = d_theta * d_theta;        // (delta theta)²
+    double iqd_theta = 1/qd_theta;              // 1/(delta theta)²
 
-    for(int i = 1; i<=m_mas_uno-2; i++){    // m_mas_uno-2 = cant radios
+    for(int i = 1; i<=m_mas_uno-2; i++){        // m_mas_uno-2 = cant radios
       double r = r_i + i*d_r;
       double qr = r*r;
       double cociente = (qr * qd_r * qd_theta);
@@ -57,16 +63,16 @@ public:
       double coef_i = (1/qr) * iqd_theta;
       double coef_j = (r - d_r)/(r * qd_r);
 
-      int j = 0;                            // salvo interior y exterior
+      int j = 0;                                 // salvo interior y exterior
       
       // resuelvo primer caso aparte;   
-      (*A)(fila, col_matriz(i, j)) = coef_ij;   // el mismo   
+      (*A)(fila, col_matriz(i, j)) = coef_ij;    // el mismo   
       
-      (*A)(fila, col_matriz(i, j+1)) = coef_i;    // el siguiente
-      (*A)(fila, col_matriz(i, n_-1)) = coef_i;   // el anterior, que es el ultimo
+      (*A)(fila, col_matriz(i, j+1)) = coef_i;   // el siguiente
+      (*A)(fila, col_matriz(i, n_-1)) = coef_i;  // el anterior, que es el ultimo
 
-      (*A)(fila, col_matriz(i-1, j)) = coef_j;  // anterior nivel
-      (*A)(fila, col_matriz(i+1, j)) = iqd_r;   // siguiente nivel
+      (*A)(fila, col_matriz(i-1, j)) = coef_j;   // anterior nivel
+      (*A)(fila, col_matriz(i+1, j)) = iqd_r;    // siguiente nivel
 
       j++; fila++;
 
@@ -83,13 +89,13 @@ public:
 
       
       // resuelvo caso final aparte
-      (*A)(fila, col_matriz(i, j)) = coef_ij; // el mismo
+      (*A)(fila, col_matriz(i, j)) = coef_ij;  // el mismo
       
-      (*A)(fila, col_matriz(i, 0)) = coef_i;  // el siguiente, que es el primero
+      (*A)(fila, col_matriz(i, 0)) = coef_i;   // el siguiente, que es el primero
       (*A)(fila, col_matriz(i, j-1)) = coef_i; // el anterior
 
       (*A)(fila, col_matriz(i-1, j)) = coef_j; // anterior nivel
-      (*A)(fila, col_matriz(i+1, j)) = iqd_r; // siguiente nivel
+      (*A)(fila, col_matriz(i+1, j)) = iqd_r;  // siguiente nivel
 
       j++;
       fila++;
@@ -119,37 +125,72 @@ public:
 
   }
 
-  void solve(std::ofstream& output_file, enum metodo met, double isoterma){ 
-    if(met == ELIM_GAUSSIANA){
-      std::cerr << "Resolviendo mediante eliminacion gaussiana..." << std::endl;
+  void solve(std::ofstream& f_soluciones, enum metodo met){ 
+ 
+    std::vector<double> x, b, y;
+
+
+    if(met == ELIM_GAUSSIANA){ 
       for(int i = 0; i<bs.size(); i++){
-        std::cerr << "\tSistema " << i << "... " << std::flush;
-        std::vector<double> b = bs[i];
-        std::vector<double> x = A->gaussian_elim(b);
-        for(int j = 0; j<x.size(); j++){
-          output_file << std::fixed << std::setprecision(8) << x[j] << std::endl;
-        }
-        std::cerr << "ok" << std::endl;
+        b = bs[i];
+        x = A->gaussian_elim(b);
+
+        soluciones.push_back(x);
       }
-    }
-    else if(met == FACTORIZACION_LU){
+    } else if(met == FACTORIZACION_LU){
       std::pair<Matriz*,Matriz*> LU = A->LU_fact();
       Matriz * L = LU.first;
       Matriz * U = LU.second;
 
       for(int i = 0; i<bs.size(); i++){
-        std::cerr << "\tSistema " << i << "... " << std::flush;
-        std::vector<double> b = bs[i];
+        b = bs[i];
         // Ax = b  -> LUx = b  -> Ly = b, donde Ux = y
-        std::vector<double> y = L->forward_subst(b);
-        std::vector<double> x = U->backward_subst(y);
-        for(int j = 0; j<x.size(); j++){
-          output_file << std::fixed << std::setprecision(8) << x[j] << std::endl;
-        }
-        std::cerr << "ok" << std::endl;
+        y = L->forward_subst(b);
+        x = U->backward_subst(y);
+
+        soluciones.push_back(x);
+      }
+    }
+
+
+    for(int i = 0; i<soluciones.size(); i++){ 
+      for(int j = 0; j<soluciones[i].size(); j++){
+        f_soluciones << std::fixed
+                     << std::setprecision(8)
+                     << soluciones[i][j] << std::endl;
       }
     }
   }
+
+  void isotermas(std::ofstream& f_isotermas, double isoterma){
+    
+
+    for(int s = 0; s<soluciones.size(); s++){
+      std::vector<double> isos;
+
+      for(int i = 0; i<n_; i++){ // para cada uno de los angulos
+        
+        std::vector<double> radios;
+
+        for(int j = 0; j<m_mas_uno_; j++){ // para cada uno de los radios
+          radios.push_back(soluciones[s][i+j*n_]); //esto sale de una cuentita
+
+          // radios tiene la temperatura de cada radio para un angulo fijo
+          // (y solucion fija)
+        }
+
+        double iso = resolver_isoterma(radios, isoterma);
+        isos.push_back(iso);
+        if(f_isotermas.is_open()) f_isotermas << iso << std::endl;
+      }
+
+      // aca habria que evaluar la isoterma, y dar el "resultado",
+      // o sea, si se va a romper el alto horno o no.
+
+    }
+  }
+
+
 
   ~Sistema(){
     delete A;
@@ -157,14 +198,47 @@ public:
 
 private:
   int m_mas_uno_, n_;
+  double r_i_, delta_r, delta_tita;
   Matriz * A;
 
   std::vector<std::vector<double> > bs;
-
-  double r_i_, delta_r, delta_tita;
+  std::vector<std::vector<double> > soluciones;
 
   
   int col_matriz(int i, int j){
     return j+n_*i;
   }
+
+  double resolver_isoterma(std::vector<double> radios, double isoterma){
+    for(int i = 0; i<radios.size()-1; i++){
+      if(isoterma>radios[i+1] && isoterma<radios[i]){
+        // la recta que une estos dos puntos tiene pendiente:
+        //     m = (radios[i+1]-radios[i])/delta_r
+        //
+        // entonces el fit lineal es:
+        // y = m * (x - (r_i + delta_r * i)) + radios[i]
+        //
+        // entonces, si me piden que y = isoterma, la solucion es:
+        //
+        //  isoterma = m * (x - (r_i + delta_r * i)) + radios[i]
+        //
+        //  (isoterma - radios[i]) / m + (r_i + delta_r * i)  =  x
+        //
+        //  x  = delta_r * (isoterma - radios[i]) / (radios[i+1]-radios[i]) 
+        //        + (r_i + delta_r * i)
+        //
+        
+        
+        
+      
+        // double x = delta_r * i + r_i_;
+
+        double x = delta_r * (isoterma-radios[i]) / (radios[i+1]-radios[i])
+                   + (r_i_+delta_r*i);  
+        return x;
+      }
+    }
+  }
+
+
 };
