@@ -133,12 +133,15 @@ public:
     if(met == ELIM_GAUSSIANA){ 
       for(int i = 0; i<bs.size(); i++){
         b = bs[i];
-        x = A->gaussian_elim(b);
+        //x = A->gaussian_elim(b);
+        x = A->gaussian_elim_mej(b, m_mas_uno_);
+
 
         soluciones.push_back(x);
       }
     } else if(met == FACTORIZACION_LU){
-      std::pair<Matriz*,Matriz*> LU = A->LU_fact();
+      //std::pair<Matriz*,Matriz*> LU = A->LU_fact();
+      std::pair<Matriz*,Matriz*> LU = A->LU_fact_mej(m_mas_uno_);
       Matriz * L = LU.first;
       Matriz * U = LU.second;
 
@@ -188,9 +191,9 @@ public:
       double prom = promedio(isos);
       double max = maximo(isos);
       
-      double umbral_med = 1000;
-      double umbral_prom = 1000;
-      double umbral_max = 1200;
+      double umbral_med = 60;
+      double umbral_prom = 60;
+      double umbral_max = 70;
       
       if (med > umbral_med || prom > umbral_prom || max > umbral_max){
 		    std::cerr << "La isoterma del sistema numero" << s << "esta en peligro" << std::flush;
