@@ -137,6 +137,66 @@ public:
     return std::make_pair(L, U);
   }
 
+//Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
+
+  std::vector<double> gaussian_elim_mej(std::vector<double> b, int m_mas_uno){
+    int n = b.size();
+    int radios = m_mas_uno;
+    Matriz gauss(this);
+
+    for(int i = 0; i<n; i++){
+      for(int fila = i+1; fila < n && fila < (i + 1 + radios); fila++){
+        // modifico la fila
+        // lo hago hasta que termine la banda de la fila (i + 1 + radios) o que termine de restar todo.
+        // f_j - cte_fila * f_i 
+        // cte_fila = prim/a_ii, donde prim es el primero de la fila
+        double prim = gauss(fila,i);
+       
+        double coeff = prim/gauss(i,i);
+        for(int j = i+1; j<n; j++){ 
+          gauss(fila, j) -= gauss(i, j) * coeff;
+        }
+        gauss(fila, i) = 0.0;
+        
+        //modifico b
+        b[fila] -= b[i] * coeff; 
+      } 
+    }
+
+    // es triangular superior, aplicamos backward substitution
+    return  gauss.backward_subst(b);
+  }
+
+//Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
+
+  std::pair<Matriz *, Matriz *> LU_fact_mej(int  m_mas_uno){
+    Matriz * U = new Matriz(this);
+    Matriz * L = new Matriz(this->n_, this->m_, 0);
+
+    int n = n_;
+	int radios = m_mas_uno;
+    // muy parecida a la eliminacion gaussiana, un poco cambiada
+    for(int i = 0; i<n; i++){
+      for(int fila = i+1; fila < n && fila < i + 1 + radios; fila++){
+        // modifico la fila 
+        // f_j - cte_fila * f_i 
+        // cte_fila = prim/a_ii, donde prim es el primero de la fila
+        double prim = (*U)(fila,i);
+       
+        double coeff = prim/(*U)(i,i);
+        for(int j = i+1; j<n; j++){ 
+          (*U)(fila, j) -= (*U)(i, j) * coeff;
+        }
+        (*U)(fila, i) = 0.0;
+        
+        // pongo el valor correspondiente en L
+        (*L)(fila, i) = coeff;
+      }
+      (*L)(i,i) = 1.0; 
+    }
+    return std::make_pair(L, U);
+  }
+
 private:
     int n_;
     int m_;
