@@ -17,7 +17,9 @@
 
 enum metodo{
   ELIM_GAUSSIANA,
-  FACTORIZACION_LU
+  FACTORIZACION_LU,
+  ELIM_GAUSSIANA_BANDA,
+  FACTORIZACION_LU_BANDA
 };
 
 
@@ -133,15 +135,31 @@ public:
     if(met == ELIM_GAUSSIANA){ 
       for(int i = 0; i<bs.size(); i++){
         b = bs[i];
-        //x = A->gaussian_elim(b);
-        x = A->gaussian_elim_mej(b, m_mas_uno_);
-
-
+        x = A->gaussian_elim(b);
         soluciones.push_back(x);
       }
     } else if(met == FACTORIZACION_LU){
-      //std::pair<Matriz*,Matriz*> LU = A->LU_fact();
-      std::pair<Matriz*,Matriz*> LU = A->LU_fact_mej(m_mas_uno_);
+      std::pair<Matriz*,Matriz*> LU = A->LU_fact();
+      Matriz * L = LU.first;
+      Matriz * U = LU.second;
+
+      for(int i = 0; i<bs.size(); i++){
+        b = bs[i];
+        // Ax = b  -> LUx = b  -> Ly = b, donde Ux = y
+        y = L->forward_subst(b);
+        x = U->backward_subst(y);
+
+        soluciones.push_back(x);
+      }
+    } if(met == ELIM_GAUSSIANA_BANDA){ 
+      for(int i = 0; i<bs.size(); i++){
+        b = bs[i]; 
+        x = A->gaussian_elim_banda(b, m_mas_uno_);
+
+        soluciones.push_back(x);
+      }
+    } else if(met == FACTORIZACION_LU_BANDA){
+      std::pair<Matriz*,Matriz*> LU = A->LU_fact_banda(m_mas_uno_);
       Matriz * L = LU.first;
       Matriz * U = LU.second;
 
@@ -154,7 +172,6 @@ public:
         soluciones.push_back(x);
       }
     }
-
 
     for(int i = 0; i<soluciones.size(); i++){ 
       for(int j = 0; j<soluciones[i].size(); j++){

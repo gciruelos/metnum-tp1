@@ -57,7 +57,7 @@ int main(int argc, char * argv[]){
   }
   
   Sistema s(r_i, r_e, m_mas_uno, n, temperaturas_interiores, temperaturas_exteriores);
-  s.solve(f_soluciones, FACTORIZACION_LU);
+  s.solve(f_soluciones, ELIM_GAUSSIANA);
   s.isotermas(f_isotermas, iso);
   
   f_soluciones.close();

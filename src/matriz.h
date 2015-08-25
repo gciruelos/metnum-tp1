@@ -139,7 +139,7 @@ public:
 
 //Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
 
-  std::vector<double> gaussian_elim_mej(std::vector<double> b, int m_mas_uno){
+  std::vector<double> gaussian_elim_banda(std::vector<double> b, int m_mas_uno){
     int n = b.size();
     int radios = m_mas_uno;
     Matriz gauss(this);
@@ -169,7 +169,7 @@ public:
 
 //Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
 
-  std::pair<Matriz *, Matriz *> LU_fact_mej(int  m_mas_uno){
+  std::pair<Matriz *, Matriz *> LU_fact_banda(int  m_mas_uno){
     Matriz * U = new Matriz(this);
     Matriz * L = new Matriz(this->n_, this->m_, 0);
 
