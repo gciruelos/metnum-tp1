@@ -4,6 +4,19 @@
 #include "sistema.h"
 //#include "matriz.h"
 
+
+
+void imprimir_vector(std::vector<double> v){
+	std::cout << "[";
+	for(int i = 0; i<v.size(); i++){
+		std::cout << v[i];
+		if(i!=v.size()-1)
+			std::cout << ", ";
+	}
+	std::cout << "]" << std::endl;
+}
+
+
 int main(int argc, char * argv[]){
   /* argv[0] es el nombre del programa
    * argv[1] es el archivo de input
@@ -13,8 +26,6 @@ int main(int argc, char * argv[]){
 
   std::ifstream input_file(argv[1]);
 
-
-  std::cout << argc << std::endl;
 
   double r_i, r_e;
   unsigned int m_mas_uno, n;
@@ -57,9 +68,13 @@ int main(int argc, char * argv[]){
   }
   
   Sistema s(r_i, r_e, m_mas_uno, n, temperaturas_interiores, temperaturas_exteriores);
-  s.solve(f_soluciones, ELIM_GAUSSIANA_BANDA);
-  s.isotermas(f_isotermas, iso);
-  
+ 
+ 	//for(int i = 0; i<ITERACIONES; i++){
+	s.solve(f_soluciones, ELIM_GAUSSIANA);
+ //
+	s.isotermas(f_isotermas, iso);
+
+	imprimir_vector(s.tiempos);
   f_soluciones.close();
 
   return 0;

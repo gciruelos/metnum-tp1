@@ -1,9 +1,12 @@
 #include "matriz.h"
-#include <vector>
-#include <cmath>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
+#include <vector>   // para vector
+#include <cmath>    // para pi
+#include <fstream>  // 
+#include <iostream> //  ---> para archivos
+#include <iomanip>  // /
+
+#include <ctime>
+
 
 /* aca van a estar las funciones wrapper de las funciones de matriz.h
  *
@@ -39,9 +42,10 @@ public:
     n_ = n;
     m_mas_uno_ = m_mas_uno;
     r_i_ = r_i;
+    r_e_ = r_e;
     delta_r = (r_e-r_i)/m_mas_uno;
 
-    std::cerr << "Armando el sistema... " << std::flush;
+    //std::cerr << "Armando el sistema... " << std::flush;
     
     int fila = 0;
     A = new Matriz(n*m_mas_uno, n*m_mas_uno, 0.0);
@@ -107,10 +111,10 @@ public:
       (*A)(fila, fila) = 1.0;
     }
     
-    std::cerr << "ok" << std::endl;
+    // std::cerr << "ok" << std::endl;
 
 
-    std::cerr << "Armando b's... " << std::flush;
+    // std::cerr << "Armando b's... " << std::flush;
     // armo b's
     int cant_bs = temps_interiores.size();
     for(int i = 0; i<cant_bs; i++){
@@ -123,13 +127,14 @@ public:
       }
       bs.push_back(b);
     }
-    std::cerr << "ok" << std::endl;
+    // std::cerr << "ok" << std::endl;
 
   }
 
   void solve(std::ofstream& f_soluciones, enum metodo met){ 
  
     std::vector<double> x, b, y;
+		std::clock_t begin = clock();
 
 
     if(met == ELIM_GAUSSIANA){ 
@@ -173,6 +178,14 @@ public:
       }
     }
 
+
+		
+		std::clock_t end = clock();
+		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+		tiempos.push_back(elapsed_secs);
+
+
+
     for(int i = 0; i<soluciones.size(); i++){ 
       for(int j = 0; j<soluciones[i].size(); j++){
         f_soluciones << std::fixed
@@ -180,6 +193,9 @@ public:
                      << soluciones[i][j] << std::endl;
       }
     }
+
+		
+
   }
 
   void isotermas(std::ofstream& f_isotermas, double isoterma){
@@ -213,7 +229,7 @@ public:
       double umbral_max = 70;
       
       if (med > umbral_med || prom > umbral_prom || max > umbral_max){
-		    std::cerr << "La isoterma del sistema numero" << s << "esta en peligro" << std::flush;
+		    std::cerr << "La isoterma del sistema numero " << s << " esta en peligro" << std::endl;
       }
     }
   }
@@ -224,9 +240,11 @@ public:
     delete A;
   }
 
+	std::vector<double> tiempos;
+
 private:
   int m_mas_uno_, n_;
-  double r_i_, delta_r, delta_tita;
+  double r_i_, r_e_, delta_r, delta_tita;
   Matriz * A;
 
   std::vector<std::vector<double> > bs;
@@ -237,9 +255,9 @@ private:
     return j+n_*i;
   }
 
-  double resolver_isoterma(std::vector<double> radios, double isoterma){
+  double resolver_isoterma(std::vector<double> radios, double isoterma, double eps = 0.0001){
     for(int i = 0; i<radios.size()-1; i++){
-      if(isoterma>radios[i+1] && isoterma<radios[i]){
+      if(radios[i+1]<isoterma && isoterma<radios[i]){
         // la recta que une estos dos puntos tiene pendiente:
         //     m = (radios[i+1]-radios[i])/delta_r
         //
@@ -255,9 +273,7 @@ private:
         //  x  = delta_r * (isoterma - radios[i]) / (radios[i+1]-radios[i]) 
         //        + (r_i + delta_r * i)
         //
-        
-        
-        
+                
       
         // double x = delta_r * i + r_i_;
 
@@ -266,6 +282,13 @@ private:
         return x;
       }
     }
+
+    if(isoterma<=radios[0]+eps){
+			return r_i_;
+		} else{
+			return r_e_;
+		}
+
   }
   
   double media(std::vector<double> v){
