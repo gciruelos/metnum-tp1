@@ -110,9 +110,18 @@ Por esta razón se puede decir que, para muchas instancias, el costo de resolver
 
 En los resultados se refleja lo que esperabamos. Como se ve en la figura \ref{fig:tiemponinst}, luego de aplicar la factorización LU, el costo que hay que pagar para resolver cada sistema es muy poco, lo cual permite una excelente performance.
 
-Por otra parte, se observa que el tiempo que le toma a la eliminación gaussiana resolver $n$ instancias, es lineal en la cantidad de instancias, lo cual confirma más aún nuestras expectativas derivadas de la teoría.
+Por otra parte, se observa que el tiempo que le toma a la eliminación gaussiana resolver $n$ instancias, es también es lineal en la cantidad de instancias, pero con una pendiente mucho mayor, lo cual confirma más aún nuestras expectativas derivadas de la teoría.
 
+En cuanto a las implementaciones optimizadas, esperamos que su comportamiento sea similar a los resultados anteriores.
 
+\begin{figure}[H]
+\centering  
+ \includegraphics[width=0.6\textwidth]{imgs/tiempos_ninst_opt.png}
+ \caption{\footnotesize{Tiempo tomado por la nuestra implementación optimizada de eliminación gaussiana y de factorización LU para resolver el problema para varias instancias de $n = m+1 = 30$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
+\label{fig:tiemponinstopt}
+\end{figure}
+
+Como se observa en la Figura \ref{fig:tiemponinstopt}, confirmamos nuestras expectativas. Se observa, al igual que antes, que la implementación optimizada de Gauss crece linealmente con respecto a la cantidad de instancias del problema entradas, al igual que la implementación de la factorización LU, sólo que esta ultima lo hace con una pendiente mucho menor.
 
 
 

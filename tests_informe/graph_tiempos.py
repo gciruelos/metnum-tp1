@@ -317,6 +317,62 @@ def tiempos_ninst():
 
 
 
+def tiempos_ninst_opt():
+    N = 5
+
+
+    gauss = [[5.87208, 6.04544, 5.84096, 5.74767, 5.76041, 5.88189, 5.92481, 5.82564, 5.85722, 5.8871],
+            [11.5732, 11.5302, 11.4879, 11.8491, 12.284, 11.5896, 13.1036, 12.4568, 11.6072, 11.9555],
+            [17.9739, 17.4841, 17.3296, 17.2489, 20.0244, 19.8973, 17.5972, 18.45, 22.5268, 18.2465],
+            [23.0742, 24.9841, 24.9301, 22.9345, 23.461],
+            [29.8897, 28.4949, 30.1358, 29.9698, 28.5845]
+            ]
+
+    menMeans = [mean(x) for x in gauss]
+    menStd =[dev(x) for x in gauss]
+
+    ind = np.arange(N)  # the x locations for the groups
+    width = 0.35       # the width of the bars
+
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(ind, menMeans, width, color='r', yerr=menStd)
+
+
+    lu = [[0.55004, 0.522876, 0.518766, 0.521966, 0.52565, 0.523748, 0.529422, 0.531278, 0.546439, 0.624897],
+            [0.850916, 0.797379, 0.811158, 0.797682, 0.796822, 0.807185, 0.835422, 0.811527, 0.814276, 0.81557],
+            [1.10539, 1.0747, 1.11917, 1.07507, 1.09212, 1.08613, 1.09935, 1.10786, 1.09924, 1.34125],
+            [1.39763, 1.35298, 1.37279, 1.35599, 1.35646, 1.43329, 1.36312, 1.58443, 1.37581, 1.71239],
+            [1.62914, 1.63589, 1.64871, 1.7174, 1.64139, 1.77404, 1.64787, 1.93883, 1.66173, 1.67146]
+            ]
+
+
+
+
+    womenMeans = [mean(x) for x in lu]
+    womenStd =   [dev(x) for x in lu]
+
+    rects2 = ax.bar(ind+width, womenMeans, width, color='y', yerr=womenStd)
+
+    # add some text for labels, title and axes ticks
+    ax.set_ylabel('Tiempo (segundos)')
+    ax.set_title('Tiempo por cantidad de instancias')
+    ax.set_xticks(ind+width)
+    ax.set_xlabel('Cantidad de instancias')
+    ax.set_xticklabels( ('25', '50', '75', '100', '125') )
+    ax.set_ylim([0, 35])
+    ax.legend( (rects1[0], rects2[0]), ('Gauss', 'LU'), loc=2 )
+
+    def autolabel(rects):
+        # attach some text labels
+        for rect in rects:
+            height = rect.get_height()
+            ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%.1f'%(round(height,2)),
+                    ha='center', va='bottom')
+
+    autolabel(rects1)
+    autolabel(rects2)
+
+    plt.savefig('tiempos_ninst_opt.png')
 
 
 
@@ -328,9 +384,10 @@ def tiempos_ninst():
 
 
 
-tiempos_vanilla_ang()
-tiempos_vanilla_rad()
-tiempos_comp_banda()
-tiempos_opt_rad()
-tiempos_opt_angulos()
-tiempos_ninst()
+#tiempos_vanilla_ang()
+#tiempos_vanilla_rad()
+#tiempos_comp_banda()
+#tiempos_opt_rad()
+#tiempos_opt_angulos()
+#tiempos_ninst()
+tiempos_ninst_opt()
