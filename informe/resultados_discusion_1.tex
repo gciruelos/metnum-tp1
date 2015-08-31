@@ -1,0 +1,30 @@
+\subsection{Evaluación de los métodos}
+
+\subsubsection{Relación entre la granularidad y precision en el calculo de la isoterma}
+
+A traves de una serie de experimentos buscamos estudiar que factores en el calculo de la isoterma contribuyen a dar mayor precision y cuales no son relevantes para asi lograr hacer una predicción mas fiable del peligro en el que puede llegar a estar el horno y sin perder el tiempo con calculos innecesarios. Para esto primero tuvimos que decidir cual seria el criterio con el que analizariamos si el horno estaba en peligro o no, decidimos utilizar el promedio, la mediana y el maximo ya que cada uno precentava ciertas ventajas. Con estos, analizabamos la isoterma y si se pasaba cierto umbral deciamos que estaba en peligro.
+
+
+Una vez planteado esto se hizo evidente que mientras mayor sea la cantidad de angulos del sistema mejor iba a ser la aproximacion de la isoterma real por lo que lograriamos detectar mejor ciertos picos y tenerlos en cuenta para poder decidir si el horno estaba en peligro o no.
+
+\subsubsection{Granularidad de los angulos}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\textwidth}
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/Img_isoterma/comp_angulos0_iso.png}
+  \caption{\footnotesize{Con 300 angulos se puede detectar a la perfeccion un pico en la isoterma, esto deja de suceder cuando la cantidad de angulos disminuyen.}}
+  \label{fig:Experimento1}
+\end{minipage}%
+\hspace{0.03\textwidth}
+\begin{minipage}{0.48\textwidth}   
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/Img_isoterma/comp_angulos5_iso.png} 
+  \caption{\footnotesize{Se puede observar como en este caso el pico desaparece y la prediccion de la isoterma comienza a ser muy pobre}}
+  \label{fig:Experimento2}
+\end{minipage}
+\end{figure}
+
+
+\subsubsection{Granularidad de los radios}
