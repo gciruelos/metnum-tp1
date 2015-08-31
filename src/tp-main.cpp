@@ -70,8 +70,7 @@ int main(int argc, char * argv[]){
   Sistema s(r_i, r_e, m_mas_uno, n, temperaturas_interiores, temperaturas_exteriores);
  
  	//for(int i = 0; i<ITERACIONES; i++){
-	s.solve(f_soluciones, ELIM_GAUSSIANA);
- //
+	s.solve(f_soluciones, FACTORIZACION_LU_BANDA);
 	s.isotermas(f_isotermas, iso);
 
 	imprimir_vector(s.tiempos);

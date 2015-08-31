@@ -139,9 +139,9 @@ public:
 
 //Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
 
-  std::vector<double> gaussian_elim_banda(std::vector<double> b, int m_mas_uno){
+  std::vector<double> gaussian_elim_banda(std::vector<double> b, int n__){
     int n = b.size();
-    int radios = m_mas_uno;
+    int radios = n__;
     Matriz gauss(this);
 
     for(int i = 0; i<n; i++){
@@ -169,12 +169,12 @@ public:
 
 //Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
 
-  std::pair<Matriz *, Matriz *> LU_fact_banda(int  m_mas_uno){
+  std::pair<Matriz *, Matriz *> LU_fact_banda(int  n__){
     Matriz * U = new Matriz(this);
     Matriz * L = new Matriz(this->n_, this->m_, 0);
 
     int n = n_;
-	int radios = m_mas_uno;
+	int radios = n__;
     // muy parecida a la eliminacion gaussiana, un poco cambiada
     for(int i = 0; i<n; i++){
       for(int fila = i+1; fila < n && fila < i + 1 + radios; fila++){

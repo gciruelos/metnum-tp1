@@ -159,12 +159,12 @@ public:
     } else if(met == ELIM_GAUSSIANA_BANDA){ 
       for(int i = 0; i<bs.size(); i++){
         b = bs[i]; 
-        x = A->gaussian_elim_banda(b, m_mas_uno_);
+        x = A->gaussian_elim_banda(b, n_);
 
         soluciones.push_back(x);
       }
     } else if(met == FACTORIZACION_LU_BANDA){
-      std::pair<Matriz*,Matriz*> LU = A->LU_fact_banda(m_mas_uno_);
+      std::pair<Matriz*,Matriz*> LU = A->LU_fact_banda(n_);
       Matriz * L = LU.first;
       Matriz * U = LU.second;
 
@@ -176,6 +176,8 @@ public:
 
         soluciones.push_back(x);
       }
+			delete L;
+			delete U;
     }
 
 
