@@ -50,6 +50,7 @@ def tiempos_vanilla_ang():
     ax.set_xticks(ind+width)
     ax.set_xlabel('Angulos')
     ax.set_xticklabels( ('10', '20', '30', '40', '50') )
+    ax.set_ylim([0, 60])
 
     ax.legend( (rects1[0], rects2[0]), ('Gauss', 'LU'), loc=2 )
 
@@ -107,7 +108,7 @@ def tiempos_vanilla_rad():
     ax.set_xticks(ind+width)
     ax.set_xlabel('Radios')
     ax.set_xticklabels( ('10', '20', '30', '40', '50') )
-
+    ax.set_ylim([0, 60])
     ax.legend( (rects1[0], rects2[0]), ('Gauss', 'LU'), loc=2 )
 
     def autolabel(rects):
@@ -175,7 +176,7 @@ def tiempos_opt_angulos():
     ax.set_xticks(ind+width)
     ax.set_xlabel('Angulos')
     ax.set_xticklabels( ('10', '20', '30', '40', '50', '60', '70') )
-
+    ax.set_ylim([0, 3.5])
     ax.legend( (rects1[0], rects2[0]), ('Gauss', 'LU'), loc=2 )
 
     def autolabel(rects):
@@ -238,7 +239,7 @@ def tiempos_opt_rad():
     ax.set_xticks(ind+width)
     ax.set_xlabel('Radios')
     ax.set_xticklabels( ('10', '20', '30', '40', '50', '60', '70') )
-
+    ax.set_ylim([0, 6])
     ax.legend( (rects1[0], rects2[0]), ('Gauss', 'LU'), loc=2 )
 
     def autolabel(rects):
@@ -255,8 +256,81 @@ def tiempos_opt_rad():
 
 
 
-#tiempos_vanilla_angulos()
-#tiempos_vanilla_rad()
-#tiempos_comp_banda()
+
+def tiempos_ninst():
+    N = 5
+
+
+    gauss = [[23.6433, 23.4683, 23.8549, 26.8511, 25.5725, 23.8877, 23.6471, 23.6469, 23.5887, 24.1569],
+            [46.6697, 46.6574, 46.6635, 46.6935, 46.6305, 46.6033, 46.7278, 46.6998, 46.6658, 46.6402],
+            [70.4321, 70.2211, 69.9862, 69.9064, 69.8872],
+            [93.4257, 93.1995, 93.1516],
+            [116.793, 117.159, 117.356]
+            ]
+
+    menMeans = [mean(x) for x in gauss]
+    menStd =   [dev(x) for x in gauss]
+
+    ind = np.arange(N)  # the x locations for the groups
+    width = 0.35       # the width of the bars
+
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(ind, menMeans, width, color='r', yerr=menStd)
+
+
+
+    lu = [[4.712, 4.65268, 4.63577, 4.62432, 4.62893, 4.61498, 4.59513, 4.60429, 4.62331, 4.62118],
+            [4.71802, 4.745, 4.82448, 4.72852, 4.67047, 4.64799, 4.65383, 4.83522, 4.67704, 4.67964],
+            [4.78136, 4.95405, 5.01935, 4.75907, 4.74782, 4.72576, 4.74566, 4.77264, 4.76687, 4.71336],
+            [4.88133, 4.78139, 4.77465, 4.77185, 4.75728, 4.77713, 4.851, 4.90126, 4.83078, 4.79364],
+            [4.93369, 5.10057, 4.82528, 4.82364, 4.92174, 4.88245, 4.82801, 4.97207, 4.90773, 4.8651]
+            ]
+
+
+
+    womenMeans = [mean(x) for x in lu]
+    womenStd =   [dev(x) for x in lu]
+
+    rects2 = ax.bar(ind+width, womenMeans, width, color='y', yerr=womenStd)
+
+    # add some text for labels, title and axes ticks
+    ax.set_ylabel('Tiempo (segundos)')
+    ax.set_title('Tiempo por cantidad de instancias')
+    ax.set_xticks(ind+width)
+    ax.set_xlabel('Cantidad de instancias')
+    ax.set_xticklabels( ('5', '10', '15', '20', '25') )
+
+    ax.legend( (rects1[0], rects2[0]), ('Gauss', 'LU'), loc=2 )
+
+    def autolabel(rects):
+        # attach some text labels
+        for rect in rects:
+            height = rect.get_height()
+            ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%.1f'%(round(height,2)),
+                    ha='center', va='bottom')
+
+    autolabel(rects1)
+    autolabel(rects2)
+
+    plt.savefig('tiempos_ninst.png')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tiempos_vanilla_ang()
+tiempos_vanilla_rad()
+tiempos_comp_banda()
 tiempos_opt_rad()
-#tiempos_opt_angulos()
+tiempos_opt_angulos()
+tiempos_ninst()

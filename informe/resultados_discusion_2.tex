@@ -94,5 +94,25 @@ Como la complejidad de los algoritmos optimizados es $O(\text{radios}^3   \text{
 
 \subsubsection{Múltiples $b$'s}
 
+Cuando buscamos simular un escenario similar al experimento anterior, pero donde las condiciones de borde (temperaturas interiores y exteriores) cambian en distintos instantes de tiempo, la situación es muy distinta. Aquí esperaríamos ver el verdadero poder de la factorización LU.
+
+Por esta razón, esperamos que la implementación de la factorización LU supere ampliamente a la de la eliminación Gaussiana, dado que en la Gaussiana se paga un costo cúbico cada vez que se quiere resolver el sistema, mientras que en con la factorización LU el costo cúbico se paga solo una vez.
+
+Por esta razón se puede decir que, para muchas instancias, el costo de resolver $Ax = b$ es cúbico para la eliminación gaussiana y cuadrático amortizado para la factorización LU.
+
+\begin{figure}[H]
+\centering  
+ \includegraphics[width=0.6\textwidth]{imgs/tiempos_ninst.png}
+ \caption{\footnotesize{Tiempo tomado por la nuestra implementación de eliminación gaussiana y de factorización LU para resolver el problema para varias instancias de $n = m+1 = 30$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
+\label{fig:tiemponinst}
+\end{figure}
+
+
+En los resultados se refleja lo que esperabamos. Como se ve en la figura \ref{fig:tiemponinst}, luego de aplicar la factorización LU, el costo que hay que pagar para resolver cada sistema es muy poco, lo cual permite una excelente performance.
+
+Por otra parte, se observa que el tiempo que le toma a la eliminación gaussiana resolver $n$ instancias, es lineal en la cantidad de instancias, lo cual confirma más aún nuestras expectativas derivadas de la teoría.
+
+
+
 
 
