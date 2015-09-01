@@ -10,24 +10,25 @@ De aquí en adelante, si no se aclara otra cosa, se asumen las siguientes conven
 \subsection{Métodos numéricos usados}
 A partir de la ecuación del calor de Laplace y las discretizaciones de las derivadas parciales dadas en el enunciado del presente trabajo práctico, se puede obtener un sistema de ecuaciones donde las soluciones son las temperaturas en los puntos de la discretización. 
 Es decir que el problema de hallar la isoterma se reduce a dos sub-problemas: el primero es resolver efectivamente el sistema planteado, mientras que el segundo consiste en usar las temperaturas halladas para estimar la posición de la isoterma.\\
-Para resolver el sistema haremos uso de los métodos de eliminación gaussiana y la factorización LU, para luego poder contrastar su eficiencia ante distintas situaciones.\\
+Para resolver el sistema haremos uso de los métodos de eliminación gaussiana y la factorización LU, para luego poder contrastar su eficiencia ante distintas situaciones. Adicionalmente, realizaremos una variación de cada método para aprovechar una de las características propias de la matriz del sistema.\\
 Para hallar la posición de la isoterma (de temperatura $t_{iso}$), dado un ángulo $\theta_j$ de la discretización, lo que haremos es buscar dos radios, $r_k$ y $r_{k+1}$, tales que $t_{k+1,j} \leq t_{iso} \leq t_{k, j}$. A partir de estos dos valores, facilmente podemos realizar un ajuste lineal considerando la recta de pendiente $m = \dfrac{t_{k,j}-t_{k+1,j}}{\Delta r}$ que pasa por $(r_k,t_{k,j})$ y $(r_{k+1}, t_{k+1,j})$. Para una explicación más detallada ver el apéndice ?????.
 
   
 \subsection{Armado del sistema de ecuaciones y su matriz asociada}
+\label{sec:armado-sistema}
 Tenemos un sistema con $n\times(m+1)$ incógnitas.
 
 Primero contamos con $n$ variables, los $t_{0,j}$ con $j = 0,1,\hdots, n-1$ (es decir, las temperaturas interiores), cuyos valores conocemos pues nos son dados como inputs. Lo mismo sucede con $t_{m, j}$ para $j = 0,1,..., n-1$ (temperaturas externas).
-Luego, para las temperaturas interiores sabemos gracias a la función de Laplace y a la discretización de las derivadas que vale \\
+Luego, para las temperaturas interiores sabemos gracias a la función de Laplace y a la discretización de las derivadas que vale 
 
 $\dfrac{t_{k-1,j} - 2t_{k,j} + t_{k+1,j}}{(\Delta r)^2} 
 + \dfrac{1}{r_k} \times \dfrac{t_{k,j} - t_{k-1,j}}{\Delta r}
 + \dfrac{1}{r_{k}^2} \times \dfrac{t_{k,j-1} -2t_{k,j} + t_{k,j+1}}{(\Delta \theta)^2} = 0$\\
 
-Reescribiendo convenientemente la ecuación de arriba nos queda que \\
+Reescribiendo convenientemente la ecuación de arriba nos queda que 
 
 \begin{equation}
-\label{laplace}
+\label{eq:laplace-discreto}
 \dfrac{r_k - \Delta r}{r_k (\Delta r)^2} t_{k-1, j} +
 \dfrac{1}{r_k^2(\Delta \theta)^2} t_{k, j-1} +
 \dfrac{r_k \Delta r (\Delta \theta)^2 - 2(\Delta r)^2}{r_k^2 (\Delta r)^2 (\Delta \theta)^2} t_{k,j} +
@@ -35,18 +36,26 @@ Reescribiendo convenientemente la ecuación de arriba nos queda que \\
 \dfrac{1}{(\Delta r)^2} t_{k+1,j}  = 0
 \end{equation}
 
-Vale destacar que si $j = 0$ entonces en lugar de $t_{k, j-1}$ se usa $t_{k, n-1}$, mientras que si $j = n-1$ en lugar de $t_{k, j+1}$ va $t_{k, 0}$.
+Vale distinguir dos casos bordes: si $j = 0$ entonces en lugar de $t_{k, j-1}$ se usa $t_{k, n-1}$, mientras que si $j = n-1$ en lugar de $t_{k, j+1}$ va $t_{k, 0}$.
 
-De esto se desprende inmediatamente que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente de sus cuatro vecinos. Cabe mencionar también que si bien todos los coeficientes dependen de la distancia al centro del horno ($r_k$), ninguno lo hace respecto del ángulo concreto en que se encuentra el punto. Esto resulta muy razonable si tenemos en cuenta que el valor del ángulo depende exclusivamente del sistema de referencia escogido (dónde ubicamos el ángulo 0), mientras que dado un punto de la pared es lógico que su temperatura no dependa del sistema de referencia escogido para su medición.
+De esto se desprende inmediatamente que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente de sus cuatro vecinos, lo que permite vislumbrar desde ya que la matriz estará compuesta principalmente por 0's. Cabe mencionar también que si bien todos los coeficientes dependen de la distancia al centro del horno ($r_k$), ninguno lo hace respecto del ángulo concreto en que se encuentra el punto. Esto resulta muy razonable si tenemos en cuenta que el valor del ángulo depende exclusivamente del sistema de referencia escogido (dónde ubicamos el ángulo 0), mientras que dado un punto de la pared es lógico que su temperatura no dependa del sistema de referencia escogido para su medición.
 
-Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de la ecuación (\ref{laplace}) (respetando el orden en que aparecen): $a_k$ (el coeficiente que acompaña a $t_{k-1, j}$), $b_k$ (el coeficiente que acompaña a $t_{k, j-1}$ y $t_{k, j+1}$), $c_k$, $d_k$ . Notar que por la observación anterior estos coeficientes sólo dependen del radio.
+Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de la ecuación (\ref{eq:laplace-discreto}): 
+\begin{itemize}
+\item $a_k = \dfrac{r_k - \Delta r}{r_k (\Delta r)^2}$ 
+\item $b_k = \dfrac{1}{r_k^2(\Delta \theta)^2}$ 
+\item $c_k = \dfrac{r_k \Delta r (\Delta \theta)^2 - 2(\Delta r)^2}{r_k^2 (\Delta r)^2 (\Delta \theta)^2}$ 
+\item $d_k = \dfrac{1}{(\Delta r)^2}$
+\end{itemize}
+
+Notar que por la observación anterior estos coeficientes sólo dependen del radio.
 
 Pensamos ahora el orden que le daremos a los puntos de la discretización. Este será el orden en el que escribiremos las ecuaciones. Sin demasiadas complicaciones, un orden razonable es primero por ángulo (desde $\theta_0$ y avanzando en sentido antihorario) y luego por radio (de menor a mayor) respetando el orden relativo previo.
 
 A continuación presentamos el sistema de ecuaciones formado 
 
 \begin{equation}
-\label{sisecu}
+\label{eq:sisecu}
   \left\lbrace
   \begin{array}{l}
      t_{0,0} = b_0 \\
@@ -57,9 +66,9 @@ A continuación presentamos el sistema de ecuaciones formado
 		 a_1 t_{0,1} + b_1 t_{1, 0} + c_1 t_{1,1} + b_1 t_{1,2} + d_1 t_{2,1} = 0 = b_{n+1} \\
 		 \vdots\\
 		 a_1 t_{0,n-2} + b_1 t_{1, n-3} + c_1 t_{1,n-2} + b_1 t_{1,n-1} + d_1 t_{2,n-1} = 0 = b_{2(n-1)} \\
-		 a_1 t_{0,n-1} + c_1 t_{1,n-1} + b_1 t_{1, 0} + b_1 t_{1, n-2} + d_1 t_{2, n-1} = 0= b_{2n - 1}\\
-		 a_2 t_{1,0} + b_2 t_{2,0} + c_2 t_{3, 0} + d_2 t_{2, n-1} + d_2 t_{2, 1} = 0 = b_{2n}\\
-		 \vdots\\
+		 a_1 t_{0,n-1} + b_1 t_{1, 0} + b_1 t_{1, n-2} + c_1 t_{1,n-1} + d_1 t_{2, n-1} = 0= b_{2n - 1}\\
+		 a_2 t_{1,0} + c_2 t_{2,0} + b_2 t_{2, 1} + b_2 t_{2, n-1}  + d_2 t_{3, 0} = 0 = b_{2n}\\
+
 		 a_{m-1} t_{m-2,n-1} + b_{m-1} t_{m-1,n-1} + c_{m-1} t_{m, n-1} + d_{m-1} t_{m-1, n-2} + d_{m-1} t_{m-1, 0} = 0 = b_{n\times m -1}\\
 		 t_{m,0} = b_{n\times m}\\
 		 \vdots\\
@@ -71,8 +80,59 @@ A continuación presentamos el sistema de ecuaciones formado
 
 $b$ tiene valores pasados por el ususario en las primeras $n$ posiciones y en las $n$ últimas, siendo el resto todos ceros.
 
+Para facilitar un poco la explicación haremos uso de un ejemplo concreto. Consideremos la siguiente discretización con $n = 4$ (particionamos la pared en cuatro ángulos iguales) y $m = 3$ (4 radios en total). En este caso, el sistema \ref{eq:sisecu} queda así
 
+\begin{equation}
+\label{ej16x16}
+  \left\lbrace
+  \begin{array}{l}
+     t_{0,0} = b_0 \\
+     t_{0,1} = b_1 \\
+     t_{0,2} = b_2 \\
+     t_{0,3} = b_3 \\
+		 a_1 t_{0,0} + c_1 t_{1,0} + b_1 t_{1, 1} + b_1 t_{1, 3} + d_1 t_{2,0} 		= 0 = b_{4}	\\
+		 a_1 t_{0,1} + b_1 t_{1,0} + c_1 t_{1,1} + b_1 t_{1,2} + d_1 t_{2,1} 		 	= 0 = b_{5}	\\
+	   a_1 t_{0,2} + b_1 t_{1,1} + c_1 t_{1,2} + b_1 t_{1,3} + d_1 t_{2,2} 			= 0 = b_{6}	\\
+		 a_1 t_{0,3} + b_1 t_{1,0} + b_1 t_{1,2} + c_1 t_{1,3} + d_1 t_{2,3} 			= 0 = b_{7}	\\
+		 a_2 t_{1,0} + c_2 t_{2,0} + b_2 t_{2,1} + b_2 t_{2,3} + d_2 t_{3,0}			= 0 = b_{8}	\\
+		 a_2 t_{1,1} + b_2 t_{2,0} + c_2 t_{2,1} + b_2 t_{2,2} + d_2 t_{3,1} 		 	= 0 = b_{9}	\\
+	   a_2 t_{1,2} + b_2 t_{2,1} + c_2 t_{2,2} + b_2 t_{2,3} + d_2 t_{3,2} 			= 0 = b_{10}	\\
+		 a_2 t_{1,3} + b_2 t_{2,0} + b_2 t_{2,2} + c_2 t_{2,3} + d_2 t_{3,3} 			= 0 = b_{11}	\\
+     t_{3,0} = b_{12} \\
+     t_{3,1} = b_{13} \\
+     t_{3,2} = b_{14} \\
+     t_{3,3} = b_{15}     		 
+  \end{array}
+  \right.
+\end{equation}
 
+La matriz asociada a \ref{ej16x16} es \vspace{1em}
+
+\setcounter{MaxMatrixCols}{16}
+\begin{center}
+$ A =
+\begin{pmatrix}
+	1	 	& 0 		& 0 		& 	0	 	& 0	 	& 0 		& 0	 	& 	0 		& 0		& 0 		& 0 		& 	0	  & 0		& 0	 	& 0 		& 	0\\
+	0	 	& 1 		& 0 		& 	0	 	& 0 		& 0		& 0	 	& 	0 		& 0 		& 0 		& 0 		& 	0	  & 0 		& 0	 	& 0 		& 	0\\
+	0	 	& 0 		& 1 		& 	0	 	& 0 		& 0 		& 0	 	& 	0 		& 0 		& 0 		& 0 		& 	0	  & 0 		& 0	 	& 0 		& 	0\\
+	0 		& 0 		& 0 		& 1	 	& 0 		& 0 		& 0	 	& 	0 		& 0 		& 0 		& 0 		& 	0	  & 0 		& 0	 	& 0 		& 	0\\
+	a_1 & 0 		& 0		& 0	 	& c_1 	& b_1 & 0		& b_1 & d_1 	& 0 		& 0 		& 	0	  & 0 		& 0	 	& 0 		& 	0\\
+	0 		& a_1	& 0		& 0	 	& b_1 	& c_1 & b_1 	& 0 		& 0 		& d_1 	& 0 		& 	0	  & 0 		& 0	 	& 0 		& 	0\\
+	0 		& 	0		& a_1	& 0	 	& 0		& b_1 	& c_1 & b_1 	& 0 		& 0 		& d_1 	& 0 	  & 0		& 0 	 	& 0		& 0\\
+	0	 	& 0 		& 0 		& a_1	& b_1	& 0 		& b_1 	& c_1	& 0		& 0 		& 0 		& d_1 & 0 		& 0	 	& 0 		& 	0\\
+	0 		& 0	 	& 0 		& 	0		&	a_2 & 0 		& 0		& 0	 	& c_2 	& b_2 & 0		& b_2 & d_2 	& 0 		& 0 		& 	0\\
+	0 		& 	0	  & 0 		& 0	 	& 0 		& a_2	& 0		& 0	 	& b_2 	& c_2 & b_2 	& 0 		& 0 		& d_2 	& 0		& 0\\
+	0 		& 	0		& 0 	 	& 0		& 0		& 0 		& a_2	& 0	 	& 0		& b_2 	& c_2 & b_2 	& 0 		& 0 		& d_2 	& 0\\ 	 
+	0	 	& 0 		& 0 		& 0 		& 0	 	& 0 		& 	0		& a_2	& b_2	& 0 		& b_2 	& c_2	& 0		& 0 		& 0 		& d_2\\
+	0	 	& 0 		& 0 		& 	0	 	& 0	 	& 0 		& 0	 	& 	0 		& 0		& 0 		& 0 		& 	0	  & 1		& 0	 	& 0 		& 	0\\
+	0	 	& 0 		& 0 		& 	0	 	& 0 		& 0		& 0	 	& 	0 		& 0 		& 0 		& 0 		& 	0	  & 0 		& 1	 	& 0 		& 	0\\
+	0	 	& 0 		& 0 		& 	0	 	& 0 		& 0 		& 0	 	& 	0 		& 0 		& 0 		& 0 		& 	0	  & 0 		& 0	 	& 1 		& 	0\\
+	0 		& 0 		& 0 		& 0	 	& 0 		& 0 		& 0	 	& 	0 		& 0 		& 0 		& 0 		& 	0	  & 0 		& 0	 	& 0 		& 	1
+\end{pmatrix} 
+$
+\end{center}
+
+Rápidamente notamos que $A$ cumple la propiedad de ser una matriz banda. No solo eso, sino que además el ancho de ambas bandas es igual a 4, lo que coincide con $n$. Tratemos de convencernos que esto no se debe a una característica particular del ejemplo y que vale en el caso general.
 
 \subsection{Estructuración del código}
 Para el modelado del problema diseñamos dos módulos: Matriz y Sistema. 
