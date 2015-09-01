@@ -1,0 +1,58 @@
+\subsection{Demo}
+Primero observemos que A es una matriz diagonal dominante no estricta. Para eso tenemos que ver que para cada fila el valor absoluto de la diagonal es mayor o igual que la norma-1 del resto de los elementos de esa fila. En nuestro caso puntual, esto significa ver que 
+$|b_k| \geq |a_k| + 2|c_k| + |d_k|$. 
+
+Primero calculemos el lado derecho de la desigualdad:
+\begin{equation*}
+\left\vert \dfrac{r_k - \Delta r}{r_k (\Delta r)^2}\right\vert +
+2 \times \left\vert \dfrac{1}{r_k^2(\Delta \theta)^2} \right\vert+
+\left\vert \dfrac{1}{(\Delta r)^2} \right\vert = 
+\dfrac{\left\vert r_k - \Delta r \right\vert}{r_k (\Delta r)^2} +
+2 \times \dfrac{1}{r_k^2(\Delta \theta)^2} +
+\dfrac{1}{(\Delta r)^2}
+\end{equation*}
+
+Asumamos primero que $\left\vert r_k - \Delta r \right\vert \geq 0$. En ese caso la ecuación anterior es igual a
+ 
+\begin{center}
+$\dfrac{2 r_k^2 (\Delta \theta)^2 - (\Delta r) r_k (\Delta \theta)^2 + 2 (\Delta r)^2}{r_k^2 (\Delta r)^2 (\Delta \theta)^2}$
+\end{center}
+
+Entonces, queremos ver que $|b_k|$ es mayor o igual que eso, es decir
+
+\begin{equation*}
+\dfrac{\left\vert -2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2 \right\vert } 
+{\left\vert r_k^2 (\Delta r)^2 (\Delta \theta)^2 \right\vert } \geq
+\dfrac{2 r_k^2 (\Delta \theta)^2 - (\Delta r) r_k (\Delta \theta)^2 + 2 (\Delta r)^2}{r_k^2 (\Delta r)^2 (\Delta \theta)^2}
+\end{equation*}
+
+Que es equivalente a
+
+\begin{equation*}
+\left\vert -2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2 \right\vert \geq
+2 r_k^2 (\Delta \theta)^2 - (\Delta r) r_k (\Delta \theta)^2 + 2 (\Delta r)^2
+\end{equation*}
+
+Supongamos que lo que está dentro del módulo es positivo, entonces tenemos
+
+\begin{center}
+$-2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2 \geq
+2 r_k^2 (\Delta \theta)^2 - (\Delta r) r_k (\Delta \theta)^2 + 2 (\Delta r)^2$ \\
+$\Updownarrow$\\
+$2\times (-2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2) \geq 0$\\
+$\Updownarrow$\\
+$-2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2 \geq 0$
+\end{center}
+
+Pero esta última desigualdad vale pues habíamos supuesto que efectivamente eso era positivo.
+
+Ahora veamos que pasa si lo de adentro del módulo es negativo. Tenemos que 
+
+\begin{center}
+$-2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2 \leq
+-2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2$ \\
+$\Updownarrow$\\
+$0 \leq 0$\\
+\end{center}
+
+Que vale trivialmente. Luego probamos que la matriz del sistema es diagonal dominante no estricta, si $~{\left\vert r_k - \Delta r \right\vert \geq 0}$. Notar además que por la última cuenta no es cierto que sea diagonal dominante estricta.

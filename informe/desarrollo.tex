@@ -15,9 +15,10 @@ Para hallar la posición de la isoterma (de temperatura $t_{iso}$), dado un áng
 
   
 \subsection{Armado del sistema de ecuaciones y su matriz asociada}
-Tenemos un sistema con $n\times(m+1)$ incógnitas.\\
+Tenemos un sistema con $n\times(m+1)$ incógnitas.
+
 Primero contamos con $n$ variables, los $t_{0,j}$ con $j = 0,1,\hdots, n-1$ (es decir, las temperaturas interiores), cuyos valores conocemos pues nos son dados como inputs. Lo mismo sucede con $t_{m, j}$ para $j = 0,1,..., n-1$ (temperaturas externas).
-Luego, para las temperaturas interiores sabemos gracias a la función de Laplace y a la discretización de las derivadas que vale que \\
+Luego, para las temperaturas interiores sabemos gracias a la función de Laplace y a la discretización de las derivadas que vale \\
 
 $\dfrac{t_{k-1,j} - 2t_{k,j} + t_{k+1,j}}{(\Delta r)^2} 
 + \dfrac{1}{r_k} \times \dfrac{t_{k,j} - t_{k-1,j}}{\Delta r}
@@ -34,11 +35,15 @@ Reescribiendo convenientemente la ecuación de arriba nos queda que \\
 \dfrac{1}{r_k^2(\Delta \theta)^2} t_{k, j+1} = 0
 \end{equation}
 
-Vale destacar que si $j = 0$ entonces en lugar de $t_{k, j-1}$ se usa $t_{k, n-1}$, mientras que si $j = n-1$ en lugar de $t_{k, j+1}$ va $t_{k, 0}$.\\
-De esto se desprende inmediatamente que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente de sus cuatro vecinos. Cabe mencionar también que si bien todos los coeficientes dependen de la distancia al centro del horno ($r_k$), ninguno lo hace respecto del ángulo concreto en que se encuentra el punto. Esto resulta muy razonable si tenemos en cuenta que el valor del ángulo depende exclusivamente del sistema de referencia escogido (dónde ubicamos el ángulo 0), mientras que dado un punto de la pared es lógico que su temperatura no dependa del sistema de referencia escogido para su medición.\\ 
+Vale destacar que si $j = 0$ entonces en lugar de $t_{k, j-1}$ se usa $t_{k, n-1}$, mientras que si $j = n-1$ en lugar de $t_{k, j+1}$ va $t_{k, 0}$.
+
+De esto se desprende inmediatamente que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente de sus cuatro vecinos. Cabe mencionar también que si bien todos los coeficientes dependen de la distancia al centro del horno ($r_k$), ninguno lo hace respecto del ángulo concreto en que se encuentra el punto. Esto resulta muy razonable si tenemos en cuenta que el valor del ángulo depende exclusivamente del sistema de referencia escogido (dónde ubicamos el ángulo 0), mientras que dado un punto de la pared es lógico que su temperatura no dependa del sistema de referencia escogido para su medición.
+
 Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de la ecuación (\ref{laplace}) (respetando el orden en que aparecen): $a_k$ (el coeficiente que acompaña a $t_{k-1, j}$), $b_k$, $c_k$, $d_k$ (el coeficiente que acompaña a $t_{k, j-1}$ y $t_{k, j+1}$). Notar que por la observación anterior estos coeficientes sólo dependen del radio.
 
+Pensamos ahora el orden que le daremos a los puntos de la discretización. Este será el orden en el que escribiremos  Sin demasiadas complicaciones, un orden razonable es primero por ángulo (desde $\theta_0$ y avanzando en sentido antihorario) y luego por radio (de menor a mayor) respetando el orden relativo previo.
 
+A continuación presentamos el sistema de ecuaciones formado 
 
 \begin{equation}
 \label{sisecu}
@@ -48,12 +53,12 @@ Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de
      t_{0,1} = b_1 \\
      \vdots\\
      t_{0,n-1} = b_{n-1} \\
-		 a_1 t_{0,0} + b_1 t_{1,0} + c_1 t_{2, 0} + d_1 t_{1, n-1} + d_1 t_{1, 1} = 0\\
+		 a_1 t_{0,0} + b_1 t_{1,0} + d_1 t_{1, 1} + d_1 t_{1, n-1} + c_1 t_{2, 0} = 0 = b_{n}\\
 		 \vdots\\
-		 a_1 t_{0,n-1} + b_1 t_{1,n-1} + c_1 t_{2, n-1} + d_1 t_{1, n-2} + d_1 t_{1, 0} = 0\\
-		 a_2 t_{1,0} + b_2 t_{2,0} + c_2 t_{3, 0} + d_2 t_{2, n-1} + d_2 t_{2, 1} = 0\\
+		 a_1 t_{0,n-1} + b_1 t_{1,n-1} + d_1 t_{1, 0} + d_1 t_{1, n-2} + c_1 t_{2, n-1} = 0= b_{2n - 1}\\
+		 a_2 t_{1,0} + b_2 t_{2,0} + c_2 t_{3, 0} + d_2 t_{2, n-1} + d_2 t_{2, 1} = 0 = b_{2n}\\
 		 \vdots\\
-		 a_{m-1} t_{m-2,n-1} + b_{m-1} t_{m-1,n-1} + c_{m-1} t_{m, n-1} + d_{m-1} t_{m-1, n-2} + d_{m-1} t_{m-1, 0} = 0\\
+		 a_{m-1} t_{m-2,n-1} + b_{m-1} t_{m-1,n-1} + c_{m-1} t_{m, n-1} + d_{m-1} t_{m-1, n-2} + d_{m-1} t_{m-1, 0} = 0 = b_{n\times m -1}\\
 		 t_{m,0} = b_{n\times m}\\
 		 \vdots\\
 		 t_{m, n-1} = b_{n\times (m+1)-1}
@@ -62,9 +67,12 @@ Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de
   \right.
 \end{equation}
 
+$b$ tiene valores pasados por el ususario en las primeras $n$ posiciones y en las $n$ últimas, siendo el resto todos ceros.
+
 
 
 
 \subsection{Estructuración del código}
-Para el modelado del problema diseñamos dos módulos: Matriz y Sistema. \\
+Para el modelado del problema diseñamos dos módulos: Matriz y Sistema. 
+
 El primero provee una representación para matrices con una interfaz conveniente. Utilizamos como representación interna un vector de vectores, junto con la cantidad de filas y columnas de la matriz. Las operaciones de Matriz permiten, dado un vector de términos independientes, obtener la solución de un sistema triangular superior sin ceros en la diagonal (o triangular inferior sin ceros en la diagonal) mediante \textit{backward substitution} (respectivamente \textit{forward substitution}), realizar eliminación gaussiana sin pivoteo (en caso de que sea posible), y, de existir, obtener la factorización LU de una matriz. Adicionalmente, hicimos otras versiones de eliminación gaussiana y factorización LU que requieren que la matriz en la que se aplican sea banda, y aprovechan este hecho para reducir la cantidad de operaciones básicas a realizar.\\

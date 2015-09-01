@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.4.14)  31 AUG 2015 21:11
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.4.14)  31 AUG 2015 22:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -674,26 +674,26 @@ LaTeX Warning: Command \textordmasculine invalid in math mode on input line 50.
 
 
 [2] (./desarrollo.tex
-Underfull \hbox (badness 10000) in paragraph at lines 18--21
+Underfull \hbox (badness 10000) in paragraph at lines 20--22
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--25
+Underfull \hbox (badness 10000) in paragraph at lines 23--26
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--27
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
 
  []
 
 
-LaTeX Warning: Command \textordmasculine invalid in math mode on input line 63.
+LaTeX Warning: Command \textordmasculine invalid in math mode on input line 46.
 
 
 [3])
-Underfull \hbox (badness 10000) in paragraph at lines 69--54
+Underfull \hbox (badness 10000) in paragraph at lines 78--54
 
  []
 
@@ -764,6 +764,12 @@ LaTeX Warning: Command \textordmasculine invalid in math mode on input line 59.
 (./conclusiones.tex) (./apendices.tex) 
 AED: lastpage setting LastPage
 
+Overfull \hbox (0.61076pt too wide) in paragraph at lines 58--65
+[]\T1/cmr/m/n/10 Que va-le tri-vial-men-te. Lue-go pro-ba-mos que la ma-triz de
+l sis-te-ma es dia-go-nal do-mi-nan-te no es-tric-ta, si $ [][]$.
+ []
+
+
 LaTeX Warning: Command \textordmasculine invalid in math mode on input line 65.
 
 
@@ -774,7 +780,7 @@ LaTeX Info: Redefining \% on input line 6.
 Here is how much of TeX's memory you used:
  5452 strings out of 493304
  72414 string characters out of 6139871
- 161801 words of memory out of 5000000
+ 159801 words of memory out of 5000000
  8746 multiletter control sequences out of 15000+600000
  19448 words of font info for 53 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -799,9 +805,9 @@ pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on tp.pdf (8 pages, 341605 bytes).
+Output written on tp.pdf (8 pages, 346052 bytes).
 PDF statistics:
- 429 PDF objects out of 1000 (max. 8388607)
+ 431 PDF objects out of 1000 (max. 8388607)
  98 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
