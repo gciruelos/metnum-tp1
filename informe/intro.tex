@@ -1,0 +1,21 @@
+
+El objetivo del presente informe es resolver un problema práctico mediante el modelado matemático del mismo. Este problema consiste en considerar la sección horizontal de un horno de acero cilíndrico, y dadas las temperaturas en el interior y en el exterior de este, analizar si se encuentra en peligro o no.
+
+Para ello, se debe encontrar una cierta isoterma, que si se encuentra muy cerca (para algún significado de la palabra muy) de la pared del horno, consideraremos que el sistema se encuentra en peligro.
+
+Para modelar la difusión de la temperatura, utilizaremos la ecuación de Laplace.
+
+\begin{equation}\label{eq:calor}
+\frac{\partial^2T(r,\theta)}{\partial r^{2}}+\frac1r \frac{\partial^2 T(r,\theta)}{\partial r} + \frac{1}{r^2} \frac{\partial T(r, \theta)}{\partial \theta^2} = 0.
+\end{equation}
+
+Como puede verse en la ecuación \ref{eq:calor}, esta ecuación depende de variables que son continuas, lo que es matemáticamente válido, pero computacionalmente imposible (a menos que se haga simbólicamente) de calcular.
+
+Para resolver este problema computacionalmente, debemos discretizar el dominio del problema en coordenadas polares. Por eso consideramos una particion $0 < \theta_0 < \theta_1 < ... < \theta_n = 2\pi$ en $n$ ángulos discretos, con $\theta_i - \theta_{i-1} = \Delta\theta$ constante, y una partición $r_i = r_0 < r_1 < ... < r_m = r_e$ en $m+1$ radios discretos con $r_j - r_{j-1} = \Delta r$ para $j = 1,...,m$.
+
+Entonces ahora, aproximadoo las derivadas numéricamente utilizando idea del cociente incremental, podemos obtener un sistema de ecuaciones linales que describa el sistema. La formulación detallada de la formulación del sistema se encuentra en el desarrollo.
+
+Para resolver estos sitemas, utilizaremos los dos métodos vistos en clase, eliminación Gaussiana y factorización LU. Además, como explicaremos mejor y también demostramos en el anexo, podemos realizar estos métodos sin utilizar pivoteo, dado que nunca aparecerá ningun $0$ en la diagonal cuando triangulemos la matriz.
+
+
+

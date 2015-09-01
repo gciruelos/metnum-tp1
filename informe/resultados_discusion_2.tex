@@ -61,26 +61,30 @@ La diferencia es enorme. Para comparar rápidamente, podemos usar una tabla:
   \label{fig:tiempocomp}
 \end{figure}
 
-Con la Figura \ref{fig:tiempocomp} se observa como la diferencia entre las implementaciones \emph{vanilla} y las optimizadas es abismal, superando el 2600\%.
-
-Esta tabla no pretende analizar las implementaciones optimizadas, simplemente probar la diferencia de rendimiento que se obtiene.
+Con la Figura \ref{fig:tiempocomp} se observa como la diferencia entre las implementaciones \emph{vanilla} y las optimizadas es abismal, superando el 2600\%. Esta tabla no pretende analizar las implementaciones optimizadas, simplemente probar la diferencia de rendimiento que se obtiene, dado que poner ambas implementaciones en un mismo gráfico no nos permitiría apreciar la diferencia.
 
 A continuación analizaremos las implementaciones optimizadas.
 
-[ACA ANALIZAMOS LA COMPLEJIDAD O LO REPETIMOS CORTITO]
+Como puede verse en el código, la complejidad de los algoritmos optimizados para realizar la eliminación Gaussiana (y por lo tanto la factorización LU) es $O(n^3 (m+1))$. Esto se debe a que, para cada fila (hay $n(m+1)$ filas) debemos realizar un trabajo que cuesta $O(n^2)$ flops.
+
+Lo anterior es fácilmente justificable, porque en cada paso de la eliminación gaussiana el objetivo es poner ceros debajo de la diagonal, entonces solo debemos modificar tantas filas como cantidad de ángulos hay, dado que la matriz es banda y tiene la forma que fue explicada anteriormente.
+
+Además de esas filas, sólo se deben modificar tantos coeficientes como ángulos, dado que sabemos que para la derecha de la fila en cuestión hay solamente ceros. Nuevamente, esto se sigue de la explicación anterior sobre la construcción de la matriz, que fue explicada anteriormente.
+
+Debido a esto, esperamos que cueste mucho mas aumentar la granularidad con respecto a los ángulos que con respecto a los radios, como se vió reflejado en los experimentos que siguen.
 
 \begin{figure}[H]
 \centering
 \begin{minipage}{0.48\textwidth}
   \centering
-    \includegraphics[width=1\textwidth]{imgs/tiempos_opt_angulos.png}
+    \includegraphics[width=1\textwidth]{imgs/tiempos_opt_radios.png}
   \caption{\footnotesize{Tiempo tomado por la nuestra implementación optimizada de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de radios está fija en 40 y la de ángulos se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
   \label{fig:tiempoopt1}
 \end{minipage}%
 \hspace{0.03\textwidth}
 \begin{minipage}{0.48\textwidth}   
   \centering
-    \includegraphics[width=1\textwidth]{imgs/tiempos_opt_radios.png} 
+    \includegraphics[width=1\textwidth]{imgs/tiempos_opt_angulos.png} 
   \caption{\footnotesize{Tiempo tomado por la nuestra implementación optimizada de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de ángulos está fija en 40 y la de radios se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
   \label{fig:tiempoopt2}
 \end{minipage}
@@ -90,7 +94,7 @@ A continuación analizaremos las implementaciones optimizadas.
 Los resultados que se ven en las Figuras \ref{fig:tiempoopt1} y \ref{fig:tiempoopt2} son muy interesantes. Primero notemos que como los procesos de eliminación gaussiana y factorización LU ambos consumen menos tiempo, se nota más la ventaja que le saca gauss a LU con un solo $b$, dado que los procesos de substitución empiezan a pesar asintóticamente.
 
 
-Como la complejidad de los algoritmos optimizados es $O(\text{radios}^3   \text{angulos})$, en los experimentos se refleja que es mucho más caro aumentar la granularidad con respecto a los radios que con respecto a los ángulos.
+Como la complejidad de los algoritmos optimizados es $O(\text{radios}^3   \text{angulos})$, en los experimentos se refleja que es mucho más caro aumentar la granularidad con respecto a los radios que con respecto a los ángulos, como sostuvimos anteriormente.
 
 \subsubsection{Múltiples $b$'s}
 
