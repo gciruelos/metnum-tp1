@@ -36,9 +36,9 @@ Reescribiendo convenientemente la ecuación de arriba nos queda que
 \dfrac{1}{(\Delta r)^2} t_{k+1,j}  = 0
 \end{equation}
 
-Vale distinguir dos casos bordes: si $j = 0$ entonces en lugar de $t_{k, j-1}$ se usa $t_{k, n-1}$, mientras que si $j = n-1$ en lugar de $t_{k, j+1}$ va $t_{k, 0}$.
+Hay que distinguir dos casos bordes que deben tratarse un poco diferente: si $j = 0$ entonces en lugar de $t_{k, j-1}$ se usa $t_{k, n-1}$, mientras que si $j = n-1$ en lugar de $t_{k, j+1}$ va $t_{k, 0}$.
 
-De esto se desprende inmediatamente que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente de sus cuatro vecinos, lo que permite vislumbrar desde ya que la matriz estará compuesta principalmente por 0's. Cabe mencionar también que si bien todos los coeficientes dependen de la distancia al centro del horno ($r_k$), ninguno lo hace respecto del ángulo concreto en que se encuentra el punto. Esto resulta muy razonable si tenemos en cuenta que el valor del ángulo depende exclusivamente del sistema de referencia escogido (dónde ubicamos el ángulo 0), mientras que dado un punto de la pared es lógico que su temperatura no dependa del sistema de referencia escogido para su medición.
+Vale destacar que si bien todos los coeficientes dependen de la distancia al centro del horno ($r_k$), ninguno lo hace respecto del ángulo concreto en que se encuentra el punto. Esto resulta muy razonable si tenemos en cuenta que el valor del ángulo depende exclusivamente del sistema de referencia escogido (dónde ubicamos el ángulo 0), mientras que dado un punto de la pared es lógico que su temperatura no dependa del sistema de referencia escogido para su medición.
 
 Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de la ecuación (\ref{eq:laplace-discreto}): 
 \begin{itemize}
@@ -47,8 +47,6 @@ Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de
 \item $c_k = \dfrac{r_k \Delta r (\Delta \theta)^2 - 2(\Delta r)^2}{r_k^2 (\Delta r)^2 (\Delta \theta)^2}$ 
 \item $d_k = \dfrac{1}{(\Delta r)^2}$
 \end{itemize}
-
-Notar que por la observación anterior estos coeficientes sólo dependen del radio.
 
 Pensamos ahora el orden que le daremos a los puntos de la discretización. Este será el orden en el que escribiremos las ecuaciones. Sin demasiadas complicaciones, un orden razonable es primero por ángulo (desde $\theta_0$ y avanzando en sentido antihorario) y luego por radio (de menor a mayor) respetando el orden relativo previo.
 
@@ -80,7 +78,9 @@ A continuación presentamos el sistema de ecuaciones formado
 
 $b$ tiene valores pasados por el ususario en las primeras $n$ posiciones y en las $n$ últimas, siendo el resto todos ceros.
 
-Para facilitar un poco la explicación haremos uso de un ejemplo concreto. Consideremos la siguiente discretización con $n = 4$ (particionamos la pared en cuatro ángulos iguales) y $m = 3$ (4 radios en total). En este caso, el sistema \ref{eq:sisecu} queda así
+Como primera observación importante notemos que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente del valor de sus cuatro vecinos, lo que permite vislumbrar desde ya que la matriz asociada tendrá una considerable cantidad de 0's.
+
+Para realizar la siguiente observación primero veamos un ejemplo concreto. Consideremos la siguiente discretización con $n = 4$ (particionamos la pared en cuatro ángulos iguales) y $m = 3$ (4 radios en total). El sistema tendrá entonces $4\times (3+1) = 16$ variables, con 16 ecuaciones. En este caso, el sistema (\ref{eq:sisecu}) queda así
 
 \begin{equation}
 \label{ej16x16}
@@ -106,7 +106,7 @@ Para facilitar un poco la explicación haremos uso de un ejemplo concreto. Consi
   \right.
 \end{equation}
 
-La matriz asociada a \ref{ej16x16} es \vspace{1em}
+Ahora escribamos la matriz asociada a (\ref{ej16x16}) es \vspace{1em}
 
 \setcounter{MaxMatrixCols}{16}
 \begin{center}
@@ -132,7 +132,13 @@ $ A =
 $
 \end{center}
 
-Rápidamente notamos que $A$ cumple la propiedad de ser una matriz banda. No solo eso, sino que además el ancho de ambas bandas es igual a 4, lo que coincide con $n$. Tratemos de convencernos que esto no se debe a una característica particular del ejemplo y que vale en el caso general.
+Rápidamente notamos que $A$ cumple la propiedad de ser una matriz banda. No solo eso, sino que además el ancho de ambas bandas es igual a 4, lo que coincide con $n$.
+
+Tratemos ahora de convencernos que esto no se debe a una característica particular del ejemplo y que vale en el caso general.
+Por un lado está claro que tanto las primeras como las últimas $n$ filas van a tener 1's en la diagonal y 0's en el resto de las posiciones, pues esas son las temperaturas que conocemos \textit{a priori}. Por lo tanto, con estas filas no hay problema.
+
+Para las filas de en medio analicemos la distancia (entiéndase \textit{cantidad de variables de distancia}) desde el elemento de la diagonal hasta el último elemento no nulo de la fila, tanto a izquierda como  a derecha. Viendo (\ref{eq:sisecu}) es fácil darse cuenta que la variable más alejada (con coeficiente no nulo) a izquierda de $t_{k,j}$ en la ecuación $n\times k + j$ (ecuación que tiene como elemento de la diagonal justamente a $t_{k,j}$) es $t_{k-1, j}$, mientras que a derecha es $t_{k+1, j}$. Ambas variables están a distancia $n$ de $t_{k,j}$. Por lo tanto cualquier coeficiente de la matriz asociada a más de distancia $n$ de la diagonal es nulo. Con esto ya nos aseguramos que la matriz es banda, cuyo ancho es como mucho $n$. Pero además como dijimos que los coeficientes que acompañan a $t_{k-1, j}$ y $t_{k+1, j}$ son no nulos (lo cual vale siempre pues efectivamente $a_k$ y $d_k$ nunca pueden ser 0), es cierto que efectivamente el ancho de ambas bandas es exactamente $n$. 
+
 
 \subsection{Estructuración del código}
 Para el modelado del problema diseñamos dos módulos: Matriz y Sistema. 
