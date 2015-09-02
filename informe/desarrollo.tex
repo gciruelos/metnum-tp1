@@ -12,7 +12,7 @@ De aquí en adelante, si no se aclara otra cosa, se asumen las siguientes conven
 A partir de la ecuación del calor de Laplace y las discretizaciones de las derivadas parciales dadas en el enunciado del presente trabajo práctico, se puede obtener un sistema de ecuaciones donde las soluciones son las temperaturas en los puntos de la discretización. 
 Es decir que el problema de hallar la isoterma se reduce a dos sub-problemas: el primero es resolver efectivamente el sistema planteado, mientras que el segundo consiste en usar las temperaturas halladas para estimar la posición de la isoterma.\\
 Para resolver el sistema haremos uso de los métodos de eliminación gaussiana y la factorización LU, para luego poder contrastar su eficiencia ante distintas situaciones. Adicionalmente, realizaremos una variación de cada método para aprovechar una de las características propias de la matriz del sistema.\\
-Para hallar la posición de la isoterma (de temperatura $t_{iso}$), dado un ángulo $\theta_j$ de la discretización, lo que haremos es buscar dos radios, $r_k$ y $r_{k+1}$, tales que $t_{k+1,j} \leq t_{iso} \leq t_{k, j}$. A partir de estos dos valores, facilmente podemos realizar un ajuste lineal considerando la recta de pendiente $m = \dfrac{t_{k,j}-t_{k+1,j}}{\Delta r}$ que pasa por $(r_k,t_{k,j})$ y $(r_{k+1}, t_{k+1,j})$. Para una explicación más detallada ver el apéndice ?????.
+Para hallar la posición de la isoterma (de temperatura $t_{iso}$), dado un ángulo $\theta_j$ de la discretización, lo que haremos es buscar dos radios, $r_k$ y $r_{k+1}$, tales que $t_{k+1,j} \leq t_{iso} \leq t_{k, j}$. A partir de estos dos valores, fácilmente podemos realizar un ajuste lineal considerando la recta de pendiente $m = \dfrac{t_{k,j}-t_{k+1,j}}{\Delta r}$ que pasa por $(r_k,t_{k,j})$ y $(r_{k+1}, t_{k+1,j})$. Para una explicación más detallada ver el apéndice ?????.
 
   
 \subsection{Armado del sistema de ecuaciones y su matriz asociada}
@@ -83,7 +83,7 @@ A continuación presentamos el sistema de ecuaciones:
   \right.
 \end{equation}
 
-$b$ tiene valores pasados por el ususario en las primeras $n$ posiciones y en las $n$ últimas, siendo el resto todos ceros.
+$b$ tiene valores pasados por el usuario en las primeras $n$ posiciones y en las $n$ últimas, siendo el resto todos ceros.
 
 Como primera observación importante notemos que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente del valor de sus cuatro vecinos, lo que permite prever que cada fila de la matriz asociada tendrá sólo cinco elementos distintos de 0.
 
@@ -179,7 +179,7 @@ La interfaz de Matriz provee las siguientes operaciones:\footnote{Cuando se escr
 Sistema es un módulo que engloba todo lo relacionado al modelado.
 
 \paragraph{Representación interna}
-Se almacenan varios valores: la cantidad de radios y ángulos de la discretización ($m\_mas\_uno\_$ y $n\_$), y el radio interno, el externo, $\Delta r$ y $\Delta\theta$. Se guarda un puntero a la matriz asociada al sistema de ecuaciones, $A$. $bs$ es un vector cuyos elementos a su vez son vectores, uno por cada instancia del problema que el ususario haya pasado. En $soluciones$ se guardarán los vectores solución del sistema para cada instancia.
+Se almacenan varios valores: la cantidad de radios y ángulos de la discretización ($m\_mas\_uno\_$ y $n\_$), y el radio interno, el externo, $\Delta r$ y $\Delta\theta$. Se guarda un puntero a la matriz asociada al sistema de ecuaciones, $A$. $bs$ es un vector cuyos elementos a su vez son vectores, uno por cada instancia del problema que el usuario haya pasado. En $soluciones$ se guardarán los vectores solución del sistema para cada instancia.
 Adicionalmente, tenemos algunas funciones auxiliares: 
 
 \begin{itemize}

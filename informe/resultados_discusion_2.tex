@@ -41,7 +41,7 @@ Por esta razón no creemos que sea algo importante a tener en cuenta, y podríam
 Por eso lo atribuimos a cuestiones relacionadas con la optimización en tiempo de compilación y no a errores en las mediciones, dado que los tests fueron corridos varias veces por el hecho de que estos resultados eran llamativos.
 
 
-Por otro lado, vemos que dividir entre ángulos y radios no hace diferencia en la performance, dado que como esperabamos, el runtime solamente depende del tamaño de la matriz, es decir $n (m+1)$, que en ambos gráficos es igual columna a columna.
+Por otro lado, vemos que dividir entre ángulos y radios no hace diferencia en la performance, dado que como esperábamos, el runtime solamente depende del tamaño de la matriz, es decir $n (m+1)$, que en ambos gráficos es igual columna a columna.
 
 
 Ahora es el turno de las implementaciones que aprovechan que la matriz es banda.
@@ -94,7 +94,7 @@ Debido a esto, esperamos que cueste mucho mas aumentar la granularidad con respe
 Los resultados que se ven en las Figuras \ref{fig:tiempoopt1} y \ref{fig:tiempoopt2} son muy interesantes. Primero notemos que como los procesos de eliminación gaussiana y factorización LU ambos consumen menos tiempo, se nota más la ventaja que le saca gauss a LU con un solo $b$, dado que los procesos de substitución empiezan a pesar asintóticamente.
 
 
-Como la complejidad de los algoritmos optimizados es $O(\text{radios}^3   \text{angulos})$, en los experimentos se refleja que es mucho más caro aumentar la granularidad con respecto a los radios que con respecto a los ángulos, como sostuvimos anteriormente.
+Como la complejidad de los algoritmos optimizados es $O(n^3(m+1))$, en los experimentos se refleja que es mucho más caro aumentar la granularidad con respecto a los radios que con respecto a los ángulos, como sostuvimos anteriormente.
 
 \subsubsection{Múltiples $b$'s}
 
@@ -112,7 +112,7 @@ Por esta razón se puede decir que, para muchas instancias, el costo de resolver
 \end{figure}
 
 
-En los resultados se refleja lo que esperabamos. Como se ve en la figura \ref{fig:tiemponinst}, luego de aplicar la factorización LU, el costo que hay que pagar para resolver cada sistema es muy poco, lo cual permite una excelente performance.
+En los resultados se refleja lo que esperábamos. Como se ve en la figura \ref{fig:tiemponinst}, luego de aplicar la factorización LU, el costo que hay que pagar para resolver cada sistema es muy poco, lo cual permite una excelente performance.
 
 Por otra parte, se observa que el tiempo que le toma a la eliminación gaussiana resolver $n$ instancias, es también es lineal en la cantidad de instancias, pero con una pendiente mucho mayor, lo cual confirma más aún nuestras expectativas derivadas de la teoría.
 
@@ -126,3 +126,4 @@ En cuanto a las implementaciones optimizadas, esperamos que su comportamiento se
 \end{figure}
 
 Como se observa en la Figura \ref{fig:tiemponinstopt}, confirmamos nuestras expectativas. Se observa, al igual que antes, que la implementación optimizada de Gauss crece linealmente con respecto a la cantidad de instancias del problema entradas, al igual que la implementación de la factorización LU, sólo que esta ultima lo hace con una pendiente mucho menor.
+
