@@ -13,9 +13,10 @@ Como puede verse en la ecuación \ref{eq:calor}, esta ecuación depende de varia
 
 Para resolver este problema computacionalmente, debemos discretizar el dominio del problema en coordenadas polares. Por eso consideramos una particion $0 < \theta_0 < \theta_1 < ... < \theta_n = 2\pi$ en $n$ ángulos discretos, con $\theta_i - \theta_{i-1} = \Delta\theta$ constante, y una partición $r_i = r_0 < r_1 < ... < r_m = r_e$ en $m+1$ radios discretos con $r_j - r_{j-1} = \Delta r$ para $j = 1,...,m$.
 
-Entonces ahora, aproximadoo las derivadas numéricamente utilizando idea del cociente incremental, podemos obtener un sistema de ecuaciones linales que describa el sistema. La formulación detallada de la formulación del sistema se encuentra en el desarrollo.
+Entonces ahora, aproximando las derivadas numéricamente utilizando idea del cociente incremental, podemos obtener un sistema de ecuaciones linales que describa el sistema. La formulación detallada de la formulación del sistema se encuentra en el desarrollo.
 
-Para resolver estos sitemas, utilizaremos los dos métodos vistos en clase, eliminación Gaussiana y factorización LU. Además, como explicaremos mejor y también demostramos en el anexo, podemos realizar estos métodos sin utilizar pivoteo, dado que nunca aparecerá ningun $0$ en la diagonal cuando triangulemos la matriz.
+Además, como explicaremos más adelante, la matriz que determina el sistema del problema tiene una forma muy especial, denominada ``banda''. Esto nos permite asegurar propiedades de la matriz, que será útil a la hora de implementar los métodos o intentar optimizarlos.
 
+Para resolver estos sistemas, utilizaremos los dos métodos vistos en clase, eliminación Gaussiana y factorización LU. Por otra parte, como explicaremos mejor y también demostramos en el anexo, podemos realizar estos métodos sin utilizar pivoteo, dado que nunca aparecerá ningun $0$ en la diagonal cuando triangulemos la matriz.
 
 
