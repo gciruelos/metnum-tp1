@@ -10,7 +10,6 @@ Una vez obtenidas todas las tempraturas del sistema buscamos por cada ángulo de
 Una vez escogidos estos criterios de analisis lo que hicimos fue para una instancia de isoterma dada ver si al calcular el promedio, mediana o máximo alguno de estos supera cierto umbral escogido entonces se dira que el horno esta en peligro. Para elegir el umbral se aconseja basarse en casos previos de hornos de caracteristicas similares que sufrieron daños, a partir de esto estudiar la isoterma en esos casos con los criterios establecidos previamente y deducir valores adecuados dentro de los cuales sea recomendable trabajar.
 
 \subsubsection{Relación entre granularidad y precision en el calculo de la isoterma}
-
 A través de una serie de experimentos buscamos estudiar que factores contribuyen a una mayor precisión en el cálculo de la posición de la isoterma. Logrando así una predicción mas fiable del peligro en el que puede llegar a estar el horno y sin perder el tiempo con calculos innecesarios.
 
 
@@ -50,7 +49,7 @@ En este primer experimento se utiliza una instancia en la cual la temperatura en
 En la Figura \ref{fig:comp_angs_iso0}, con 30 ángulos, se puede detectar a la perfección un pico en la isoterma. Luego, en la Figura \ref{fig:comp_angs_iso3}, con 10 ángulos si bien se detecta un pico, la forma que se muestra está muy alejada de la real, esto podría causar falsas alarmas o la ausencia de las mismas.
 Finalmente, en la Figura \ref{fig:comp_angs_iso4}, en la que se discretizó con 8 ángulos se puede observar como el pico desaparece fallando dramaticamente la predicción en la forma de la isoterma.
 
-[DECIR COSAS DEL LINK]
+Para mas detalles de la evolución de la isoterma y las temperaturas calculadas en el sistema se recomienda recurrir al link citado mas arriba, http://bit.ly/1Uqt90x, en la animación comp_angs_iso se podrá notar con mayor detalle lo nombrado previamente, la isoterma ira marcando el pico con mayor precisión a medida que se utilicen mas ángulos, en los casos en que la cantidad de ángulos sea insuficiente el pico y las temperaturas en esa zona estaran muy distorsionadas, esto se puede observar claramente en comp_angs_temp, donde las temperaturas en la zona del pico se calculan de forma imprecisa debido a la utilización de una cantidad de ángulos muy pobre.
 
 
 \subsubsection{Granularidad de los radios}
