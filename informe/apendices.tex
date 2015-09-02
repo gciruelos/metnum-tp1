@@ -56,3 +56,28 @@ $0 \leq 0$\\
 \end{center}
 
 Que vale trivialmente. Luego probamos que la matriz del sistema es diagonal dominante no estricta, si $~{\left\vert r_k - \Delta r \right\vert \geq 0}$. Notar además que por la última cuenta no es cierto que sea diagonal dominante estricta.
+
+
+Ahora, la demostración que sigue es similar a la demostración de la proposición que demuestra que diagonal dominante estricta implica que no aparecen ceros en la diagonal al hacer eliminación gaussiana. En esta demotración, simplemente se ve que aplicarle un paso de eliminación gaussiana a la matriz la deja diagonal superior.
+
+Con una lógica muy parecida, podemos ver que la matriz de nuestro problema, luego de aplicarle un paso de eliminación gaussiana, queda diagonal dominante (no estricta). Además, la matriz queda banda, con las bandas exteriores siendo las mismas que antes. Esto se ve claramente, dado que cuando se modifica fila por fila, solo hay que modificar tantas filas como el ancho de la banda, y todas estas filas siguen teniendo la propiedad de tener todos valores iguales a 0 fuera de la banda,
+dado que restarle la fila a la que le estamos aplicando el paso de factorización gaussiana tiene todos ceros a partir de un coeficiente.
+
+\begin{figure}[H]
+    \begin{center}
+\includegraphics[scale=0.3]{imgs/expl.png}
+\end{center}
+\caption{\footnotesize{Representación de la matriz, la columna roja indica la columna en la que voy a poner ceros (a la izquierda hay todos ceros, ya que aplicamos eliminación gaussiana), y tengo que restarle la fila roja a la fila azul.}}
+ \end{figure}
+
+Luego, vimos que la matriz, luego de aplicarle un paso de eliminación gaussiana, la matriz queda diagonal dominante (no estricta) y banda, con las mismas bandas de siempre. Veamos entonces que la matriz tiene un elemento distinto de 0 en la diagonal, antes de aplicar el siguiente paso de eliminación gaussiana.
+
+Como la fila tiene elementos distintos de 0 (en particular, el coeficiente determinado por la banda superior es siempre distinto de 0), y ademas la matriz es diagonal superior (no estricta), tenemos que
+
+\[
+  |a_{ii}^{(i)}| \geq \sum_{j \neq i} |a_{ij}^{(i)}| > 0
+\]
+
+Entonces, $|a_{ii}^{(i)}| > 0$, que es lo que queríamos ver.
+
+
