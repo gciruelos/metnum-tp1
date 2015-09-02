@@ -50,7 +50,7 @@ public:
 
 private:
 	int m_mas_uno_, n_;
-	double r_i_, r_e_, delta_r, delta_tita;
+	double r_i_, r_e_, delta_r;
 	Matriz * A;
 
 	std::vector<std::vector<double> > bs;

@@ -8,6 +8,7 @@ De aquí en adelante, si no se aclara otra cosa, se asumen las siguientes conven
 \item$b\in \mathbb{R}^{n\times (m+1)}: b = (b_0, b_1, \hdots, b_{(n\times (m+1))-1})$ será el vector de términos independientes del sistema que plantearemos luego (veremos que la dimensión escogida es correcta). 
 \end{itemize}
 \subsection{Métodos numéricos usados}
+\label{sec:metodos}
 A partir de la ecuación del calor de Laplace y las discretizaciones de las derivadas parciales dadas en el enunciado del presente trabajo práctico, se puede obtener un sistema de ecuaciones donde las soluciones son las temperaturas en los puntos de la discretización. 
 Es decir que el problema de hallar la isoterma se reduce a dos sub-problemas: el primero es resolver efectivamente el sistema planteado, mientras que el segundo consiste en usar las temperaturas halladas para estimar la posición de la isoterma.\\
 Para resolver el sistema haremos uso de los métodos de eliminación gaussiana y la factorización LU, para luego poder contrastar su eficiencia ante distintas situaciones. Adicionalmente, realizaremos una variación de cada método para aprovechar una de las características propias de la matriz del sistema.\\
@@ -48,7 +49,11 @@ Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de
 \item $d_k = \dfrac{1}{(\Delta r)^2}$
 \end{itemize}
 
-Pensamos ahora el orden que le daremos a los puntos de la discretización. Este será el orden en el que escribiremos las ecuaciones. Sin demasiadas complicaciones, un orden razonable es primero por ángulo (desde $\theta_0$ y avanzando en sentido antihorario) y luego por radio (de menor a mayor) respetando el orden relativo previo.
+Pensamos ahora el orden que le daremos a los puntos de la discretización. Este será el orden en el que escribiremos las ecuaciones. Sin demasiadas complicaciones, un orden razonable es primero por ángulo (desde $\theta_0$ y avanzando en sentido antihorario) y luego por radio (de menor a mayor) respetando el orden relativo previo. Luego, dado un $t_{k,j}$ para obtener su posición (contada desde 0) en este orden debemos realizar la siguiente cuenta
+\begin{equation}
+\label{eq:posicion}
+	posicion(t_{k,j}) = k\times n + j
+\end{equation}
 
 La cantidad total de variables es $n\times(m+1)$ (cantidad de ángulos por cantidad de radios), y como para cada una podemos o bien plantear la ecuación \ref{eq:laplace-discreto}, o bien ya conocemos su valor, podemos armar un sistema de $n\times(m+1)$ ecuaciones lineales.
 
@@ -139,7 +144,7 @@ Rápidamente notamos que $A$ cumple la propiedad de ser una matriz banda. No sol
 Tratemos ahora de convencernos que esto no se debe a una característica particular del ejemplo y que vale en el caso general.
 Por un lado está claro que tanto las primeras como las últimas $n$ filas van a tener 1's en la diagonal y 0's en el resto de las posiciones, pues esas son las temperaturas que conocemos \textit{a priori}. Por lo tanto, con estas filas no hay problema.
 
-Para las filas de en medio analicemos la distancia (entiéndase \textit{cantidad de variables de distancia}) desde el elemento de la diagonal hasta el último elemento no nulo de la fila, tanto a izquierda como  a derecha. Viendo (\ref{eq:sisecu}) es fácil darse cuenta que la variable más alejada (con coeficiente no nulo) a izquierda de $t_{k,j}$ en la ecuación $n\times k + j$ (ecuación que tiene como elemento de la diagonal justamente a $t_{k,j}$) es $t_{k-1, j}$, mientras que a derecha es $t_{k+1, j}$. Ambas variables están a distancia $n$ de $t_{k,j}$. Por lo tanto cualquier coeficiente de la matriz asociada a más de distancia $n$ de la diagonal es nulo. Con esto ya nos aseguramos que la matriz es banda, cuyo ancho es como mucho $n$. Pero además como dijimos que los coeficientes que acompañan a $t_{k-1, j}$ y $t_{k+1, j}$ son no nulos (lo cual vale siempre pues efectivamente $a_k$ y $d_k$ nunca pueden ser 0), es cierto que el ancho de ambas bandas es exactamente $n$. 
+Para las filas de en medio analicemos la distancia (entiéndase \textit{cantidad de variables de distancia}) desde el elemento de la diagonal hasta el último elemento no nulo de la fila, tanto a izquierda como  a derecha. Viendo la ecuación (\ref{eq:laplace-discreto}) es fácil darse cuenta que la variable más alejada (con coeficiente no nulo) a izquierda de $t_{k,j}$ es $t_{k-1, j}$, mientras que a derecha es $t_{k+1, j}$. Ambas variables están a distancia $n$ de $t_{k,j}$, pues para llegar desde el punto $(r_k, \theta_j)$ a $(r_k-1, \theta_j)$ o $(r_k+1, \theta_j)$ es necesario dar una vuelta completa ($n$ ángulos discretos) en sentido horario o antihorario respectivamente. Por lo tanto cualquier coeficiente de la matriz asociada a más de distancia $n$ de la diagonal es nulo. Con esto ya nos aseguramos que la matriz es banda, cuyo ancho es como mucho $n$. Pero además como dijimos que los coeficientes que acompañan a $t_{k-1, j}$ y $t_{k+1, j}$ son no nulos (lo cual vale siempre pues efectivamente $a_k$ y $d_k$ nunca pueden ser 0\footnote{Efectivamente $a_k = 0 \Leftrightarrow r_k - \Delta r = 0$, pero como $r_k = r_i + k\times \Delta r$ la única forma de que esa resta sea 0 es que $r_i$ sea 0, lo cual no tiene sentido en el contexto del problema (sería pura pared).}), es cierto que el ancho de ambas bandas es exactamente $n$. 
 
 
 \subsection{Estructuración del código}
@@ -150,21 +155,56 @@ Para el modelado del problema diseñamos dos módulos: Matriz y Sistema.
 La representación interna es realmente simple: un vector de vectores fila, y dos enteros, n\_ para la cantidad de filas y m\_ para la cantidad de columnas.
 
 \paragraph{Interfaz}
-La interfaz de Matriz provee las siguientes operaciones:
+La interfaz de Matriz provee las siguientes operaciones:\footnote{Cuando se escribe la aridad de la función la misma puede no coincidir con la notación usada en C++. Esto está bien pues lo único que se busca aquí es dar una orientación de lo que hace cada función y no código preciso.}
 
 \begin{itemize}
-\item Matriz(int n, int m, double init): constructor de la matriz. n es la cantidad de filas y m la de columnas, mientras que init será el valor que tendrán inicialmente todos los elementos de la matriz.
-\item Otras operaciones usuales: un constructor por copia, una función para imprimir la matriz, funciones que devuelven la cantidad de filas y de columnas, y un operador que permite acceder a cada elemento de la matriz (se numera a partir de 0).
-\item vector<double> backward\_subst(Matriz A, vector<double> b): función que dada una matriz cuadrada triangular superior sin ceros en la diagonal y un vector de tamaño igual a la cantidad de columnas de la matriz, resuelve el sistema planteado mediante el algoritmo de \textit{backward substitution}.
-\item vector<double> forward\_subst(Matriz A, vector<double> b): análogo al anterior pero para matrices triangulares inferiores, resuelve el sistema usando \textit{forward substitution}.
+	\item Matriz(\textbf{int} n, \textbf{int} m, \textbf{double} init): constructor de la matriz. n es la cantidad de filas y m la de columnas, mientras que init será el valor que tendrán inicialmente todos los elementos de la matriz.
+
+	\item Otras operaciones usuales: un constructor por copia, una función para imprimir la matriz, funciones que devuelven la cantidad de filas y de columnas, y un operador que permite acceder a cada elemento de la matriz (se numera a partir de 0).
+
+	\item \textbf{vector<double>} backward\_subst(\textbf{Matriz} A, \textbf{vector<double>} b): función que dada una matriz cuadrada triangular superior sin ceros en la diagonal y un vector de tamaño igual a la cantidad de columnas de la matriz, resuelve el sistema planteado mediante el algoritmo de \textit{backward substitution}.
+
+	\item \textbf{vector<double>} forward\_subst(\textbf{Matriz} A, \textbf{vector<double>} b): análogo al anterior pero para matrices triangulares inferiores, resuelve el sistema usando \textit{forward substitution}.
+
+	\item \textbf{vector<double>} gaussian\_elim(\textbf{Matriz} A, \textbf{vector<double>} b)
+
+	\item \textbf{pair<Matriz *, Matriz *>} LU\_fact()
+	
+	\item \textbf{vector<double>} gaussian\_elim\_banda(\textbf{vector<double>} b, \textbf{int} ancho)
+	
+	\item \textbf{pair<Matriz *, Matriz *>} LU\_fact\_banda(\textbf{int} ancho)
 \end{itemize}
 
 \subsubsection{Sistema}
 Sistema es un módulo que engloba todo lo relacionado al modelado.
 
 \paragraph{Representación interna}
+Se almacenan varios valores: la cantidad de radios y ángulos de la discretización ($m\_mas\_uno\_$ y $n\_$), y el radio interno, el externo, $\Delta r$ y $\Delta\theta$. Se guarda un puntero a la matriz asociada al sistema de ecuaciones, $A$. $bs$ es un vector cuyos elementos a su vez son vectores, uno por cada instancia del problema que el ususario haya pasado. En $soluciones$ se guardarán los vectores solución del sistema para cada instancia.
+Adicionalmente, tenemos algunas funciones auxiliares: 
+
+\begin{itemize}
+	\item $col\_matriz$ que permite obtener dados $k,j$ la posición de la variable $t_{k,j}$ en el orden que les dimos (realizando la operación (\ref{eq:calor}));
+	\item \textbf{double} $resolver\_isoterma$(\textbf{vector<double>} radios, \textbf{double} isoterma, \textbf{double} eps = 0.0001): $radios$ tiene la temperatura en cada radio sobre un ángulo fijo, $isoterma$ es el valor de la isoterma buscada, y $eps$ es un parámetro \textit{hardcodeado} que define el error que se tiene en cuenta para realizar una comparación en el caso extremo en que la isoterma buscada no se encuentre entre ningún par de radios, es decir, que el radio buscado es menor que $r_i$ o mayor que $r_e$). Por decisión, en estos casos devolvemos $r_i$ o $r_e$ según la temperatura interior sea mayor que la isoterma buscada o no respectivamente. Sino, lo que devolvemos es la distancia desde el centro del horno hasta el punto donde estimamos se encuentra la isoterma (usando el ajuste lineal explicado en sección (\ref{sec:metodos})).
+	\item Tres funciones que nos dan 3 criterios para decidir si el sistema está en peligro o no, dado un vector que tiene la posición de la isoterma en cada ángulo: mediana, promedio y máximo. 
+\end{itemize}
 
 \paragraph{Interfaz}
+La interfaz de Sistema provee las siguientes operaciones:\footnote{Cuando se escribe la aridad de la función la misma puede no coincidir con la notación usada en C++. Esto está bien pues lo único que se busca aquí es dar una orientación de lo que hace cada función y no código preciso.}
+
+\begin{itemize}
+	\item Sistema(\textbf{double} r\_i,
+					\textbf{double} r\_e,
+          \textbf{int} m\_mas\_uno,
+          \textbf{int} n,
+          \textbf{vector<vector<double$>$>} interiores,
+          \textbf{vector<vector<double$>$>} exteriores)	:
+  		constructor del sistema. Cada vector de interiores es una medición de las temperaturas interiores en una determinada instancia (la cual está dada por la posición de la medición en interiores). exteriores es análogo a interiores para las mediciones de temperaturas exteriores. En una primera etapa inicializa los atributos de tipo double. Luego, arma A y bs.
+          
+  \item \textbf{void} solve(\textbf{ofstream\&} f\_soluciones, \textbf{metodo} met):
+
+  \item \textbf{void} isotermas(\textbf{ofstream\&} f\_isotermas, \textbf{double} isoterma):
+
+\end{itemize}
 
 \subsection{Experimentación}
 

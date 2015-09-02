@@ -5,6 +5,6 @@ tp: tp.tex
 	pdflatex tp.tex
 
 clean:
-	rm *.aux
-	rm *.log
-	rm *.synctex.gz
+	rm -f *.aux
+	rm -f *.log
+	rm -f *.synctex.gz
