@@ -12,7 +12,19 @@ De aquí en adelante, si no se aclara otra cosa, se asumen las siguientes conven
 A partir de la ecuación del calor de Laplace y las discretizaciones de las derivadas parciales dadas en el enunciado del presente trabajo práctico, se puede obtener un sistema de ecuaciones donde las soluciones son las temperaturas en los puntos de la discretización. 
 Es decir que el problema de hallar la isoterma se reduce a dos sub-problemas: el primero es resolver efectivamente el sistema planteado, mientras que el segundo consiste en usar las temperaturas halladas para estimar la posición de la isoterma.\\
 Para resolver el sistema haremos uso de los métodos de eliminación gaussiana y la factorización LU, para luego poder contrastar su eficiencia ante distintas situaciones. Adicionalmente, realizaremos una variación de cada método para aprovechar una de las características propias de la matriz del sistema.\\
-Para hallar la posición de la isoterma (de temperatura $t_{iso}$), dado un ángulo $\theta_j$ de la discretización, lo que haremos es buscar dos radios, $r_k$ y $r_{k+1}$, tales que $t_{k+1,j} \leq t_{iso} \leq t_{k, j}$. A partir de estos dos valores, fácilmente podemos realizar un ajuste lineal considerando la recta de pendiente $m = \dfrac{t_{k,j}-t_{k+1,j}}{\Delta r}$ que pasa por $(r_k,t_{k,j})$ y $(r_{k+1}, t_{k+1,j})$. Para una explicación más detallada ver el apéndice ?????.
+Para hallar la posición de la isoterma (de temperatura $t_{iso}$), dado un ángulo $\theta_j$ de la discretización, lo que haremos es buscar dos radios, $r_k$ y $r_{k+1}$, tales que $t_{k+1,j} \leq t_{iso} \leq t_{k, j}$. A partir de estos dos valores, fácilmente podemos realizar un ajuste lineal considerando la recta de pendiente $m = \dfrac{t_{k,j}-t_{k+1,j}}{\Delta r}$ que pasa por $(r_k,t_{k,j})$ y $(r_{k+1}, t_{k+1,j})$. Es decir la recta
+
+\begin{equation*}
+y = m \times (x - r_{k+1}) + t_{k,j}
+\end{equation*}
+
+nos da una aproximación del valor de la temperatura en el punto que está a distancia $x$ del centro. Como a nosotros lo que nos interesa es la inversa de esta función (dada la temperatura queremos saber a que distancia del centro se encuentra) despejamos y obtenemos 
+
+\begin{equation}
+x = \dfrac{ y-t_{k,j} } {m} + r_{k+1}
+\end{equation}
+
+Luego, si queremos obtener la posición de la isoterma solo debemos reemplazar $y$ por el valor de la isoterma.
 
   
 \subsection{Armado del sistema de ecuaciones y su matriz asociada}
@@ -200,9 +212,9 @@ La interfaz de Sistema provee las siguientes operaciones:\footnote{Cuando se esc
           \textbf{vector<vector<double$>$>} exteriores)	:
   		constructor del sistema. Cada vector de interiores es una medición de las temperaturas interiores en una determinada instancia (la cual está dada por la posición de la medición en interiores). exteriores es análogo a interiores para las mediciones de temperaturas exteriores. En una primera etapa inicializa los atributos de tipo double. Luego, arma A y bs.
           
-  \item \textbf{void} solve(\textbf{ofstream\&} f\_soluciones, \textbf{metodo} met):
+  \item \textbf{void} solve(\textbf{ofstream\&} f\_soluciones, \textbf{metodo} met):	toma como parámetros un archivo de salida donde imprimirá las soluciones del sistema con el formato solicitado por la cátedra, y un metodo, que es un tipo numerado definido por nosotros que puede tomar cuatro valores: ELIM\_GAUSSIANA, \mbox{FACTORIZACION\_LU,} ELIM\_GAUSSIANA\_BANDA, FACTORIZACION\_LU\_BANDA. El método escogido será el que se use para resolver el sistema.
 
-  \item \textbf{void} isotermas(\textbf{ofstream\&} f\_isotermas, \textbf{double} isoterma):
+  \item \textbf{void} isotermas(\textbf{ofstream\&} f\_isotermas, \textbf{double} isoterma): toma un archivo de salida en el que imprimirá la lista de las posiciones de la isoterma buscada para ángulo. La forma en la que trabaja consiste en iterar sobre todos los ángulos y para cada uno llamar a la auxiliar resolver\_isoterma, y posteriormente imprimir el resultado.   
 
 \end{itemize}
 
