@@ -13,14 +13,17 @@ Una vez escogidos estos criterios de análisis lo que hicimos fue para una insta
 A través de una serie de experimentos buscamos estudiar que factores contribuyen a una mayor precisión en el cálculo de la posición de la isoterma. Logrando así una predicción mas fiable del peligro en el que puede llegar a estar el horno y sin perder el tiempo con cálculos innecesarios.
 
 
-Al realizar los experimentos nos interesamos en estudiar como la granularidad afectaba la aproximación precisa de la isoterma, para así poder estar seguros si el horno estaba o no en peligro. Para hacer esto separamos los experimentos en dos, primero estudiamos que pasaba cuando utilizábamos una mayor cantidad de ángulos y luego lo mismo para los radios. En este documento presentamos las imágenes mas representativas de nuestra investigación pero para una mayor profundización se puede visitar http://bit.ly/1Uqt90x donde están todos nuestros experimentos sobre isotermas.
+Al realizar los experimentos nos interesamos en estudiar como la granularidad afectaba la aproximación precisa de la isoterma, para así poder estar seguros si el horno estaba o no en peligro. Para hacer esto separamos los experimentos en dos, primero estudiamos que pasaba cuando utilizábamos una mayor cantidad de ángulos y luego lo mismo para los radios.
+
+En este documento presentamos las imágenes mas representativas de nuestra investigación pero para una mayor profundización se puede visitar el link de la segunda sección del apéndice, donde están todos nuestros experimentos sobre isotermas.
+
 
 \subsubsection{Granularidad de los ángulos}
 
-A través de nuestros experimentos pudimos observar como al aumentar la cantidad de ángulos se podían detectar mejor los cambios bruscos en la isoterma, permitiendo ver con mayor claridad donde comienzan y donde acaban los picos mientras mejor sea la granularidad. En caso de utilizar una granularidad pobre se ven picos poco precisos o incluso gráficos de isotermas erróneos que fallan en detectar el pico, lo cual podría conllevar consecuencias muy graves al no advertir un posible peligro en el horno.
+Antes de realizar los experimentos, nos planteamos nuestras hipótesis. Como al aumentar la cantidad de ángulos se podrán detectar mejor los cambios bruscos en la isoterma, esto permitirá ver con mayor claridad donde comienzan y donde acaban los picos mientras mejor sea la granularidad. En caso de utilizar una granularidad pobre se verán picos poco precisos o incluso gráficos de isotermas erróneos que fallan en detectar el pico, lo cual podría conllevar consecuencias muy graves al no advertir un posible peligro en el horno.
 
+En este primer experimento se utiliza una instancia en la cual la temperatura en todos los ángulos externos es igual excepto en una pequeña zona donde aumenta. Si se piensa a $r_e$ y $r_i$ como listas, lo que hicimos para disminuir la granularidad, fue ir tomando, primero los índices pares de cada uno, luego los índices múltiplos de 3, y así sucesivamente. Esto puede pensarse como que disminuimos la cantidad de mediciones que tomamos de la temperatura, pero manteniendo su equidistribución a lo largo del borde del horno.
 
-En este primer experimento se utiliza una instancia en la cual la temperatura en todos los ángulos externos es igual excepto en una pequeña zona donde aumenta.
 
 \begin{figure}[H]
 \centering
@@ -74,55 +77,111 @@ En este primer experimento se utiliza una instancia en la cual la temperatura en
 En las Figuras \ref{fig:comp_angs_temp0} y \ref{fig:comp_angs_iso0}, con 30 ángulos, se puede detectara la perfección la existencia y ubicación de un pico en la isoterma. Luego, en las Figuras \ref{fig:comp_angs_temp3} y \ref{fig:comp_angs_iso3}, con 10 ángulos si bien se detecta un pico, la forma que se muestra está muy alejada de la real. Nótese por ejemplo que la dirección en la que se encuentra el pico no es la misma que la anterior, además de que el tamaño es distinto. Esto podría causar falsas alarmas o la ausencia de las mismas.
 Finalmente, en las Figuras \ref{fig:comp_angs_temp4} y \ref{fig:comp_angs_iso4}, en la que se discretizó con 8 ángulos se puede observar como el pico desaparece fallando dramáticamente la predicción en la forma de la isoterma. 
 
-Para mas detalles de la evolución de la isoterma y las temperaturas calculadas en el sistema se recomienda recurrir al link citado mas arriba, http://bit.ly/1Uqt90x, en la animación comp\_angs\_iso se podrá notar con mayor claridad lo nombrado previamente, la isoterma ira marcando el pico con mayor precisión a medida que se utilicen mas ángulos, en los casos en que la cantidad de ángulos sea insuficiente el pico y las temperaturas en esa zona estarán muy distorsionadas, esto se puede observar claramente en comp\_angs\_temp, donde las temperaturas en la zona del pico se calculan de forma imprecisa debido a la utilización de una cantidad de ángulos muy pobre.
+Para mas detalles de la evolución de la isoterma y las temperaturas calculadas en el sistema se recomienda recurrir al link de la sección 2 del apéndice, en la animación ``comp\_angs\_iso'' se podrá notar con mayor claridad lo nombrado previamente, la isoterma ira marcando el pico con mayor precisión a medida que se utilicen mas ángulos, en los casos en que la cantidad de ángulos sea insuficiente el pico y las temperaturas en esa zona estarán muy distorsionadas, esto se puede observar claramente en ``comp\_angs\_temp'', donde las temperaturas en la zona del pico se calculan de forma imprecisa debido a la utilización de una cantidad de ángulos muy pobre.
 
 
 \subsubsection{Granularidad de los radios}
-Al estudiar las posibilidades en la cantidad de radios a utilizar se puede observar como a mayor granularidad mejora la posición de la isoterma, convergiendo a la posición real. A diferencia de los ángulos, con los radios los picos serán detectados sin tomar demasiadas precauciones pero para asegurar que el tamaño de los picos, y de la isoterma en general, sean predichos de forma confiable se recomendara utilizar una cantidad de radios adecuadamente alta según la necesidad que se tenga.
+Al estudiar las posibilidades en la cantidad de radios a utilizar creemos que observaremos como a mayor granularidad mejora la posición de la isoterma, convergiendo a la posición real. A diferencia de los ángulos, con los radios los picos serán detectados sin tomar demasiadas precauciones pero para asegurar que el tamaño de los picos, y de la isoterma en general, sean predichos de forma confiable se recomendará utilizar una cantidad de radios adecuadamente alta según la necesidad que se tenga.
 
 Para verificar un poco esto utilizamos dos instancias de prueba. La primera forma una isoterma con forma de óvalo debido a un aumento en la temperatura externa en dos zonas opuestas. La segunda es un círculo perfecto producido por una temperatura constante a lo largo de todo el interior y exterior del horno. En ambos casos veremos como la figura va cambiando su tamaño al tender a la isoterma real.
 
-\subsubsection{Instancia 1}
+En la instancia 1 empezamos con 10 radios y fuimos aumentando de a 10, mientras que en la instancia 2 empezamos con 5 y fuimos aumentando de a 5. Ponemos solo algunos pasos significativos de todo ese camino. Para ver todos los pasos (animados), se puede visitar el link del apéndice, sección 2.
+
+\subsubsection*{Instancia 1}
+
 
 \begin{figure}[H]
 \centering
-\begin{minipage}{0.48\textwidth}
+\begin{minipage}{0.30\textwidth}
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/comp_rads_malo/comp_rads_iso5.png}
+	\caption{60 radios}  
+  \label{fig:Radios4}
+\end{minipage}%
+\hspace{0.03\textwidth}
+\begin{minipage}{0.30\textwidth}   
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/comp_rads_malo/comp_rads_iso3.png} 
+	\caption{40 radios} 
+  \label{fig:Radios5}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}{0.30\textwidth}   
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/comp_rads_malo/comp_rads_iso0.png} 
+	\caption{10 radios} 
+  \label{fig:Radios6}
+\end{minipage}
+\end{figure}
+
+Sucede lo mismo que en en el experimento anterior, al tomar una cantidad relativamente alta de radios se logra un error muy pequeño del tamaño de la isoterma, en este caso se utilizaron 60. La diferencia entre utilizar 40, 50 y 60 radios no fue muy grande, al menos para nuestros estandáres, por lo cual se podrían utilizar simplemente 40 consiguiendo un buena relación entre tiempo de cálculo y aproximación al tamaño de la isoterma.
+
+Para apreciar mejor esto pueden acceder al link de la segunda sección del apéndice y ver las animaciones ``comp\_rads\_iso'' y ``comp\_rads\_iso''.
+
+
+
+
+\subsubsection*{Instancia 2}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.30\textwidth}
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/comp_rads_bueno/comp_radss_temp5.png}
+  \caption{}
+  \label{fig:Radios_1}
+\end{minipage}%
+\hspace{0.03\textwidth}
+\begin{minipage}{0.30\textwidth}   
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/comp_rads_bueno/comp_radss_temp2.png} 
+    \caption{} 
+  \label{fig:Radios_2}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}{0.30\textwidth}   
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/comp_rads_bueno/comp_radss_temp0.png} 
+    \caption{} 
+  \label{fig:Radios_3}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.30\textwidth}
   \centering
     \includegraphics[width=1\textwidth]{imgs/comp_rads_bueno/comp_radss_iso5.png}
   \caption{}
   \label{fig:Radios1}
 \end{minipage}%
 \hspace{0.03\textwidth}
-\begin{minipage}{0.48\textwidth}   
+\begin{minipage}{0.30\textwidth}   
+  \centering
+    \includegraphics[width=1\textwidth]{imgs/comp_rads_bueno/comp_radss_iso2.png} 
+    \caption{} 
+  \label{fig:Radios2}
+\end{minipage}%
+\hspace{0.03\textwidth}
+\begin{minipage}{0.30\textwidth}   
   \centering
     \includegraphics[width=1\textwidth]{imgs/comp_rads_bueno/comp_radss_iso0.png} 
     \caption{} 
-  \label{fig:Radios2}
-\end{minipage}
-\end{figure}
-
-
-Se puede observar como, a pesar de tener el mismo conjunto de temperaturas exteriores e interiores, y la misma discretización con respecto a los ángulos, hay una gran diferencia entre la Figura \ref{fig:Radios1}, con 30 radios, que consigue una aproximación muy buena del tamaño de la isoterma y la Figura \ref{fig:Radios2} que con sus 5 radios consigue una isoterma muy alejada de la real.
-
-\subsubsection{Instancia 2}
-
-
-\begin{figure}[H]
-\centering
-\begin{minipage}{0.48\textwidth}
-  \centering
-    \includegraphics[width=1\textwidth]{imgs/comp_rads_malo/comp_rads_iso5.png}
-	\caption{60 radios}  
   \label{fig:Radios3}
-\end{minipage}%
-\hspace{0.03\textwidth}
-\begin{minipage}{0.48\textwidth}   
-  \centering
-    \includegraphics[width=1\textwidth]{imgs/comp_rads_malo/comp_rads_iso0.png} 
-	\caption{10 radios} 
-  \label{fig:Radios4}
 \end{minipage}
 \end{figure}
 
-Sucede lo mismo que en en el experimento anterior, al tomar una cantidad relativamente alta de radios se logra un error muy pequeño del tamaño de la isoterma, en este caso se utilizaron 60. La diferencia entre utilizar 40, 50 y 60 radios no fue muy grande, al menos para nuestros estandáres, por lo cual se podrían utilizar simplemente 40 consiguiendo un buena relación entre tiempo de cálculo y aproximación al tamaño de la isoterma, para apreciar mejor esto pueden acceder a http://bit.ly/1Uqt90x y ver las animaciones "comp\_rads\_iso" y "comp\_rads\_iso2".
+Se puede observar como, a pesar de tener el mismo conjunto de temperaturas exteriores e interiores, y la misma discretización con respecto a los ángulos, hay una gran diferencia entre las Figuras \ref{fig:Radios1} y \ref{fig:Radios_1} , con 30 radios, que consigue una aproximación muy buena del tamaño de la isoterma y las Figuras \ref{fig:Radios3} y \ref{fig:Radios_3} que con sus 5 radios consigue una isoterma muy alejada de la real.
+
+Además, se pueden apreciar los valores intermedios en las Figuras \ref{fig:Radios2} y \ref{fig:Radios_2} (en las que se usan 15 radios) para ver como evolucionan las soluciones frente a estos cambios.
+
+Para apreciar mejor esto pueden acceder al link de la segunda sección del apéndice y ver las animaciones ``comp\_rads\_iso2'' y ``comp\_rads\_temp2''.
+
+
+
+
+
+
+
+
 
