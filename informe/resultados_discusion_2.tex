@@ -1,7 +1,7 @@
 \subsection{Evaluación de los métodos}
 
 \subsubsection{Único $b$}
-Nuestro primer análisis de los métodos utilizados para la resolución del problema va a consistir en una teórica. 
+Nuestro primer análisis de los métodos utilizados para la resolución del problema va a consistir en uno teórico. 
 
 La resolución mediante el método de eliminación Gaussiana tiene dos partes, la primera es la eliminación gaussiana propiamente dicha, que tiene un costo de $O(k^3)$ flops, donde $k$ es la cantidad de filas (y columnas) de la matriz y la segunda es el algoritmo llamado \emph{backwards substitution}, que tiene un costo de $O(k^2)$ flops.
 
@@ -10,9 +10,9 @@ La resolución mediante el método de factorización LU tiene tres partes, la pr
 
 
 Para medir los tiempos de ambas implementaciones decidimos hacer dos experimentos separados, sin embargo similares. 
-En uno fijamos una cantidad de radios y movemos la cantidad de angulos, y en el otro al revés.
+En uno fijamos una cantidad de radios y movemos la cantidad de ángulos, y en el otro al revés.
 Lo hicimos así para que las dimensiones de la matriz (ancho o alto, dado que son iguales porque es cuadrada) crezca linealmente, ya que si hacemos variar ángulos y radios al mismo tiempo, las dimensiones dejan de crecer linealmente.
-Queremos que las dimensiones crezcan linealmente para que los resultados se entiendan mejor, dado que una escala lineal es, generalmente, más naturales a la vista.
+Queremos que las dimensiones crezcan linealmente para que los resultados se entiendan mejor, dado que una escala lineal es, generalmente, más natural a la vista.
 
 
 \begin{figure}[H]
@@ -20,14 +20,14 @@ Queremos que las dimensiones crezcan linealmente para que los resultados se enti
 \begin{minipage}{0.48\textwidth}
   \centering
     \includegraphics[width=1\textwidth]{imgs/tiempos_vanilla_angulos.png}
-  \caption{\footnotesize{Tiempo tomado por la nuestra implementación de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de radios está fija en 40 y la de ángulos se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
+  \caption{\footnotesize{Tiempo tomado por la nuestra, implementación de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de radios está fija en 40 y la de ángulos se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
   \label{fig:tiempo1}
 \end{minipage}%
 \hspace{0.03\textwidth}
 \begin{minipage}{0.48\textwidth}   
   \centering
     \includegraphics[width=1\textwidth]{imgs/tiempos_vanilla_radios.png} 
-  \caption{\footnotesize{Tiempo tomado por la nuestra implementación de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de ángulos está fija en 40 y la de radios se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
+  \caption{\footnotesize{Tiempo tomado por nuestra implementación de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de ángulos está fija en 40 y la de radios se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
   \label{fig:tiempo2}
 \end{minipage}
 \end{figure}
@@ -126,6 +126,3 @@ En cuanto a las implementaciones optimizadas, esperamos que su comportamiento se
 \end{figure}
 
 Como se observa en la Figura \ref{fig:tiemponinstopt}, confirmamos nuestras expectativas. Se observa, al igual que antes, que la implementación optimizada de Gauss crece linealmente con respecto a la cantidad de instancias del problema entradas, al igual que la implementación de la factorización LU, sólo que esta ultima lo hace con una pendiente mucho menor.
-
-
-
