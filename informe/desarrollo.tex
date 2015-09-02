@@ -50,7 +50,9 @@ Para facilitar la lectura, de ahora en adelante llamaremos a los coeficientes de
 
 Pensamos ahora el orden que le daremos a los puntos de la discretización. Este será el orden en el que escribiremos las ecuaciones. Sin demasiadas complicaciones, un orden razonable es primero por ángulo (desde $\theta_0$ y avanzando en sentido antihorario) y luego por radio (de menor a mayor) respetando el orden relativo previo.
 
-A continuación presentamos el sistema de ecuaciones formado 
+La cantidad total de variables es $n\times(m+1)$ (cantidad de ángulos por cantidad de radios), y como para cada una podemos o bien plantear la ecuación \ref{eq:laplace-discreto}, o bien ya conocemos su valor, podemos armar un sistema de $n\times(m+1)$ ecuaciones lineales.
+
+A continuación presentamos el sistema de ecuaciones: 
 
 \begin{equation}
 \label{eq:sisecu}
@@ -78,7 +80,7 @@ A continuación presentamos el sistema de ecuaciones formado
 
 $b$ tiene valores pasados por el ususario en las primeras $n$ posiciones y en las $n$ últimas, siendo el resto todos ceros.
 
-Como primera observación importante notemos que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente del valor de sus cuatro vecinos, lo que permite vislumbrar desde ya que la matriz asociada tendrá una considerable cantidad de 0's.
+Como primera observación importante notemos que el valor de cada $t_{k,j}$ ($1\leq k < m$) depende exclusivamente del valor de sus cuatro vecinos, lo que permite prever que cada fila de la matriz asociada tendrá sólo cinco elementos distintos de 0.
 
 Para realizar la siguiente observación primero veamos un ejemplo concreto. Consideremos la siguiente discretización con $n = 4$ (particionamos la pared en cuatro ángulos iguales) y $m = 3$ (4 radios en total). El sistema tendrá entonces $4\times (3+1) = 16$ variables, con 16 ecuaciones. En este caso, el sistema (\ref{eq:sisecu}) queda así
 
@@ -132,44 +134,59 @@ $ A =
 $
 \end{center}
 
-Rápidamente notamos que $A$ cumple la propiedad de ser una matriz banda. No solo eso, sino que además el ancho de ambas bandas es igual a 4, lo que coincide con $n$.
+Rápidamente notamos que $A$ cumple la propiedad de ser una matriz banda. No solo eso, sino que además el ancho de ambas bandas (superior e inferior) es igual a 4, lo que coincide con $n$.
 
 Tratemos ahora de convencernos que esto no se debe a una característica particular del ejemplo y que vale en el caso general.
 Por un lado está claro que tanto las primeras como las últimas $n$ filas van a tener 1's en la diagonal y 0's en el resto de las posiciones, pues esas son las temperaturas que conocemos \textit{a priori}. Por lo tanto, con estas filas no hay problema.
 
-Para las filas de en medio analicemos la distancia (entiéndase \textit{cantidad de variables de distancia}) desde el elemento de la diagonal hasta el último elemento no nulo de la fila, tanto a izquierda como  a derecha. Viendo (\ref{eq:sisecu}) es fácil darse cuenta que la variable más alejada (con coeficiente no nulo) a izquierda de $t_{k,j}$ en la ecuación $n\times k + j$ (ecuación que tiene como elemento de la diagonal justamente a $t_{k,j}$) es $t_{k-1, j}$, mientras que a derecha es $t_{k+1, j}$. Ambas variables están a distancia $n$ de $t_{k,j}$. Por lo tanto cualquier coeficiente de la matriz asociada a más de distancia $n$ de la diagonal es nulo. Con esto ya nos aseguramos que la matriz es banda, cuyo ancho es como mucho $n$. Pero además como dijimos que los coeficientes que acompañan a $t_{k-1, j}$ y $t_{k+1, j}$ son no nulos (lo cual vale siempre pues efectivamente $a_k$ y $d_k$ nunca pueden ser 0), es cierto que efectivamente el ancho de ambas bandas es exactamente $n$. 
+Para las filas de en medio analicemos la distancia (entiéndase \textit{cantidad de variables de distancia}) desde el elemento de la diagonal hasta el último elemento no nulo de la fila, tanto a izquierda como  a derecha. Viendo (\ref{eq:sisecu}) es fácil darse cuenta que la variable más alejada (con coeficiente no nulo) a izquierda de $t_{k,j}$ en la ecuación $n\times k + j$ (ecuación que tiene como elemento de la diagonal justamente a $t_{k,j}$) es $t_{k-1, j}$, mientras que a derecha es $t_{k+1, j}$. Ambas variables están a distancia $n$ de $t_{k,j}$. Por lo tanto cualquier coeficiente de la matriz asociada a más de distancia $n$ de la diagonal es nulo. Con esto ya nos aseguramos que la matriz es banda, cuyo ancho es como mucho $n$. Pero además como dijimos que los coeficientes que acompañan a $t_{k-1, j}$ y $t_{k+1, j}$ son no nulos (lo cual vale siempre pues efectivamente $a_k$ y $d_k$ nunca pueden ser 0), es cierto que el ancho de ambas bandas es exactamente $n$. 
 
 
 \subsection{Estructuración del código}
 Para el modelado del problema diseñamos dos módulos: Matriz y Sistema. 
 
-El primero provee una representación para matrices con una interfaz conveniente. Utilizamos como representación interna un vector de vectores, junto con la cantidad de filas y columnas de la matriz. Las operaciones de Matriz permiten, dado un vector de términos independientes, obtener la solución de un sistema triangular superior sin ceros en la diagonal (o triangular inferior sin ceros en la diagonal) mediante \textit{backward substitution} (respectivamente \textit{forward substitution}), realizar eliminación gaussiana sin pivoteo (en caso de que sea posible), y, de existir, obtener la factorización LU de una matriz. Adicionalmente, hicimos otras versiones de eliminación gaussiana y factorización LU que requieren que la matriz en la que se aplican sea banda, y aprovechan este hecho para reducir la cantidad de operaciones básicas a realizar.\\
+\subsubsection{Matriz}
+\paragraph{Representación interna}
+La representación interna es realmente simple: un vector de vectores fila, y dos enteros, n\_ para la cantidad de filas y m\_ para la cantidad de columnas.
+
+\paragraph{Interfaz}
+La interfaz de Matriz provee las siguientes operaciones:
+
+\begin{itemize}
+\item Matriz(int n, int m, double init): constructor de la matriz. n es la cantidad de filas y m la de columnas, mientras que init será el valor que tendrán inicialmente todos los elementos de la matriz.
+\item Otras operaciones usuales: un constructor por copia, una función para imprimir la matriz, funciones que devuelven la cantidad de filas y de columnas, y un operador que permite acceder a cada elemento de la matriz (se numera a partir de 0).
+\item vector<double> backward\_subst(Matriz A, vector<double> b): función que dada una matriz cuadrada triangular superior sin ceros en la diagonal y un vector de tamaño igual a la cantidad de columnas de la matriz, resuelve el sistema planteado mediante el algoritmo de \textit{backward substitution}.
+\item vector<double> forward\_subst(Matriz A, vector<double> b): análogo al anterior pero para matrices triangulares inferiores, resuelve el sistema usando \textit{forward substitution}.
+\end{itemize}
+
+\subsubsection{Sistema}
+Sistema es un módulo que engloba todo lo relacionado al modelado.
+
+\paragraph{Representación interna}
+
+\paragraph{Interfaz}
 
 \subsection{Experimentación}
 
-Pasemos a detallar los metodos que usamos para la experimentación.
+Pasemos a detallar los métodos que usamos para la experimentación.
 
+En cuanto a la experimentación en lo que concierne al comportamiento de los resultados del programa cuando se cambian las discretizaciones, podemos decir que tuvimos muchos intentos hasta obtener el resultado deseado. De hecho, la experimentación extensiva que realizamos nos perimitió detectar un pequeño bug del código que no se hacía notar en los tests de la cátedra.
 
+Para evaluar el comportamiento de los resultados, diseñamos configuraciones de sistemas que varían lo más posible cuando se cambia la discretización, como se verá en los resultados y la discusión.
 
-En cuanto a la experimentación en lo que concierne al comportamiento de los resultados del programa cuando se cambian las discretizaciones, podemos decir que tuvimos muchos intentos hasta obtener el resultado deseado. De hecho, la experimentación extensiva que realizamos nos perimitió detectar un pequeño bug del código que no se hacia notar en los tests de la cátedra.
-
-Para evaluar el comportamiento de los resultados, diseñamos configuraciones de sistemas que varíen lo más posible cuando se cambiara la discretización, como se verá en los resultados y la discusión.
-
-Para evaluar como varían los resultados cuando se aumenta la granularidad con respecto a los ángulos, lo que hicimos fue simplemente hacer un sistema cuyas temperaturas exteriores sean todas iguales, excepto 3 o 4 que son mucho más altas y están juntas. En consecuencia, cuando se achique la granularidad, estos detalles se perderán y el sistema parecerá más estable de lo que en realidad es.
+Para evaluar como cambian los resultados cuando se aumenta la granularidad con respecto a los ángulos, lo que hicimos fue simplemente hacer un sistema cuyas temperaturas exteriores sean todas iguales, excepto 3 o 4 que son mucho más altas y están juntas. En consecuencia, cuando se achique la granularidad, estos detalles se perderán y el sistema parecerá más estable de lo que en realidad es.
 
 Para evaluar como varían los resultados cuando se aumenta la granularidad con respecto a los radios, lo que hicimos fue similar, solo que no hace falta tomar un sistema muy especial, dado que las diferencias se notan fácilmente.
 
-
-
-En cuanto a la experimentación en lo que concierne a la comparación del tiempo que le toma resolver el problema a cada uno de los metodos, lo que hicimos fue crear sistemas de variada granularidad y calcular cuanto tiempo le tomaba al programa resolverlo, (desde que la matriz del sistema se terminó de construir, hasta que se resolvió el problema para todos los $b$'s).
+En cuanto a la experimentación en lo que concierne a la comparación del tiempo que le toma resolver el problema a cada uno de los métodos, lo que hicimos fue crear sistemas de variada granularidad y calcular cuanto tiempo le tomaba al programa resolverlo (desde que la matriz del sistema se terminó de construir, hasta que se resolvió el problema para todos los $b$'s).
 
 Los tests fueron planteados por separado para sistemas en los que se debe resolver un único $b$ y otros en los que se debe resolver múltiples $b$s. Además, comparamos las implementaciones de eliminación Gaussiana, factorización LU y sus respectivas implementaciones optimizadas.
 
-Al principio realizamos únicos tests que no distiniguían granularidad de ángulos y de radios, pero luego notamos que en nuestras implementaciones optimizadas, teóricamente, iba a ser importante diferenciar entre granularidad de ángulos y de radios, lo que finalmente sucedió. Por esta razón, decidimos separar los tests de tiempos de único $b$ en 2, uno que varíe cantidad de radios y otro cantidad de ángulos.
+Al principio realizamos únicos tests que no distinguían granularidad de ángulos y de radios, pero luego notamos que en nuestras implementaciones optimizadas, teóricamente, podían surgir diferencias entre un cambio en la granularidad de ángulos y otro en la de radios, cosa que luego verificamos empíricamente. Por esta razón, decidimos separar los tests de tiempos de único $b$ en 2, uno que varíe cantidad de radios y otro cantidad de ángulos.
 
 
 Para esto, repetimos 50 veces cada corrida, 30 veces las que tardaban mas de 30 segundos y 15 las que tomaban más de un minuto, dado que la desviación standard es mucho menor (dado que la desviación se debe generalmente a cambios de contexto durante el runtime del programa, que para programas que corren poco tiempo varía mucho).
 
-Elegimos este número dado que la desviación standard era lo suficientemente chica como para que el experimento fuera confiable, y al mismo tiempo que tardaran un tiempo razonable para permitiernos realizar muchos experimentos.
+Elegimos este número dado que la desviación standard era lo suficientemente chica como para que el experimento fuera confiable, y al mismo tiempo que tardaran un tiempo razonable para permitirnos realizar muchos experimentos.
 
-Los tiempos fueron tomados en una computadora que con un procesador Intel Core i5-2450M @ 2.50GHz, con 8GB de memoria RAM.
+Los tiempos fueron tomados en una computadora que contaba con un procesador Intel Core i5-2450M @ 2.50GHz, con 8GB de memoria RAM.
