@@ -1,24 +1,25 @@
-\subsection{Demo}
+\subsection{Demostración de la Proposición 1 del enunciado}
 Primero observemos que A es una matriz diagonal dominante no estricta. Para eso tenemos que ver que para cada fila el valor absoluto de la diagonal es mayor o igual que la norma-1 del resto de los elementos de esa fila. En nuestro caso puntual, esto significa ver que 
 $|c_k| \geq |a_k| + 2|b_k| + |d_k|$\footnote{Los coeficientes están definidos en la sección \ref{sec:armado-sistema}}.
 
 Primero calculemos el lado derecho de la desigualdad:
-\begin{equation*}
+
+\begin{eqnarray}
+\label{ec:sinModulo}
 \left\vert \dfrac{r_k - \Delta r}{r_k (\Delta r)^2}\right\vert +
 2 \times \left\vert \dfrac{1}{r_k^2(\Delta \theta)^2} \right\vert+
-\left\vert \dfrac{1}{(\Delta r)^2} \right\vert = 
-\dfrac{\left\vert r_k - \Delta r \right\vert}{r_k (\Delta r)^2} +
+\left\vert \dfrac{1}{(\Delta r)^2} \right\vert & = &
+\dfrac{r_k - \Delta r }{r_k (\Delta r)^2} +
 2 \times \dfrac{1}{r_k^2(\Delta \theta)^2} +
-\dfrac{1}{(\Delta r)^2}
-\end{equation*}
+\dfrac{1}{(\Delta r)^2}\\ 
+& = & 
+\label{ec:sinModulo2}
+\dfrac{2 r_k^2 (\Delta \theta)^2 - (\Delta r) r_k (\Delta \theta)^2 + 2 (\Delta r)^2}{r_k^2 (\Delta r)^2 (\Delta \theta)^2}
+\end{eqnarray}
 
-Asumamos primero que $\left\vert r_k - \Delta r \right\vert \geq 0$. En ese caso la ecuación anterior es igual a
+En (\ref{ec:sinModulo}) efectivamente podemos quitar los módulos pues todos los términos son positivos. Esto es evidente para $b_k$ y $c_k$, aunque un poco menos para $a_k$. En efecto, $r_k - \Delta r$ podría llegar a ser negativo sólo en el caso que $k = 0$, pues $r_k = r_i + k\times \Delta r$. Pero para todos los $t_{0,j}$ no planteamos la ecuación \ref{eq:laplace-discreto} pues ya conocemos su valor, así que no afecta.
  
-\begin{center}
-$\dfrac{2 r_k^2 (\Delta \theta)^2 - (\Delta r) r_k (\Delta \theta)^2 + 2 (\Delta r)^2}{r_k^2 (\Delta r)^2 (\Delta \theta)^2}$
-\end{center}
-
-Entonces, queremos ver que $|b_k|$ es mayor o igual que eso, es decir
+Entonces, queremos ver que $|b_k|$ es mayor o igual que (\ref{ec:sinModulo2}), es decir
 
 \begin{equation*}
 \dfrac{\left\vert -2 r_k^2 (\Delta \theta)^2 + (\Delta r) r_k (\Delta \theta)^2 - 2 (\Delta r)^2 \right\vert } 
@@ -70,9 +71,9 @@ dado que restarle la fila a la que le estamos aplicando el paso de factorizació
 \caption{\footnotesize{Representación de la matriz, la columna roja indica la columna en la que voy a poner ceros (a la izquierda hay todos ceros, ya que aplicamos eliminación gaussiana), y tengo que restarle la fila roja a la fila azul.}}
  \end{figure}
 
-Luego, vimos que la matriz, luego de aplicarle un paso de eliminación gaussiana, la matriz queda diagonal dominante (no estricta) y banda, con las mismas bandas de siempre. Veamos entonces que la matriz tiene un elemento distinto de 0 en la diagonal, antes de aplicar el siguiente paso de eliminación gaussiana.
+Luego, vimos que la matriz, al aplicarle un paso de eliminación gaussiana, queda diagonal dominante (no estricta) y banda, con las mismas bandas de siempre. Veamos entonces que la matriz tiene un elemento distinto de 0 en la diagonal, antes de aplicar el siguiente paso de eliminación gaussiana.
 
-Como la fila tiene elementos distintos de 0 (en particular, el coeficiente determinado por la banda superior es siempre distinto de 0), y ademas la matriz es diagonal superior (no estricta), tenemos que
+Como la fila tiene elementos distintos de 0 (en particular, el coeficiente determinado por la banda superior es siempre distinto de 0), y además la matriz es diagonal superior (no estricta), tenemos que
 
 \[
   |a_{ii}^{(i)}| \geq \sum_{j \neq i} |a_{ij}^{(i)}| > 0
