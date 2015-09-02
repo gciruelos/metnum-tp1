@@ -1,6 +1,6 @@
 #include "matriz.h"
 
-Matriz::Matriz::Matriz(int n, int m, double init) : n_(n), m_(m) {  
+Matriz::Matriz(int n, int m, double init) : n_(n), m_(m) {  
 	for(int i = 0; i<n; i++){
     std::vector<double> row;
     for(int j = 0; j<m; j++){
@@ -124,7 +124,6 @@ std::pair<Matriz *, Matriz *> Matriz::LU_fact(){
   return std::make_pair(L, U);
 }
 
-//Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
 
 std::vector<double> Matriz::gaussian_elim_banda(std::vector<double> b, int n__){
   int n = b.size();
@@ -154,7 +153,6 @@ std::vector<double> Matriz::gaussian_elim_banda(std::vector<double> b, int n__){
   return  gauss.backward_subst(b);
 }
 
-//Factorizacion LU mejorada, haciendo la resta entre filas hasta que empiezan a haber ceros en f_i.
 
 std::pair<Matriz *, Matriz *> Matriz::LU_fact_banda(int  n__){
   Matriz * U = new Matriz(this);

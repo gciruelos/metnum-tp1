@@ -149,8 +149,6 @@ void Sistema::solve(std::ofstream& f_soluciones, enum metodo met){
 		delete U;
   }
 
-
-	
 	std::clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 	tiempos.push_back(elapsed_secs);
@@ -165,12 +163,9 @@ void Sistema::solve(std::ofstream& f_soluciones, enum metodo met){
     }
   }
 
-	
-
 }
 
 void Sistema::isotermas(std::ofstream& f_isotermas, double isoterma){
-  
 
   for(int s = 0; s<soluciones.size(); s++){
     std::vector<double> isos;
@@ -204,7 +199,6 @@ void Sistema::isotermas(std::ofstream& f_isotermas, double isoterma){
     }
   }
 }
-
 
 
 Sistema::~Sistema(){
