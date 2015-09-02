@@ -49,15 +49,15 @@ public:
 	std::vector<double> tiempos;
 
 private:
-  int m_mas_uno_, n_;
-  double r_i_, r_e_, delta_r, delta_tita;
-  Matriz * A;
+	int m_mas_uno_, n_;
+	double r_i_, r_e_, delta_r, delta_tita;
+	Matriz * A;
 
-  std::vector<std::vector<double> > bs;
-  std::vector<std::vector<double> > soluciones;
+	std::vector<std::vector<double> > bs;
+	std::vector<std::vector<double> > soluciones;
 
   
-  int col_matriz(int i, int j);
+	int col_matriz(int i, int j);
 
 	double resolver_isoterma(std::vector<double> radios, double isoterma, double eps = 0.0001){
 	  for(int i = 0; i<radios.size()-1; i++){
@@ -95,7 +95,7 @@ private:
 
 	}
   
-  double media(std::vector<double> v);
+  double mediana(std::vector<double> v);
   
   double promedio(std::vector<double> v);
 

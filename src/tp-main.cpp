@@ -2,8 +2,6 @@
 #include <fstream>
 #include <vector>
 #include "sistema.h"
-//#include "matriz.h"
-
 
 
 void imprimir_vector(std::vector<double> v){

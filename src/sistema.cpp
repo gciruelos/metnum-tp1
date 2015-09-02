@@ -186,7 +186,7 @@ void Sistema::isotermas(std::ofstream& f_isotermas, double isoterma){
       if(f_isotermas.is_open()) f_isotermas << iso << std::endl;
     }
     //Analizo si la isoterma supera algun umbral peligroso.
-    double med = media(isos);
+    double med = mediana(isos);
     double prom = promedio(isos);
     double max = maximo(isos);
     
@@ -213,7 +213,7 @@ int Sistema::col_matriz(int i, int j){
   return j+n_*i;
 }
 
-double Sistema::media(std::vector<double> v){
+double Sistema::mediana(std::vector<double> v){
   double aux;
   for(int i = 0; i < v.size(); i++)
     for(int j = i; j < v.size(); j++){
