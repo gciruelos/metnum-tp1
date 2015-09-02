@@ -159,7 +159,7 @@ std::pair<Matriz *, Matriz *> Matriz::LU_fact_banda(int  n__){
   Matriz * L = new Matriz(this->n_, this->m_, 0);
 
   int n = n_;
-int radios = n__;
+  int radios = n__;
   // muy parecida a la eliminacion gaussiana, un poco cambiada
   for(int i = 0; i<n; i++){
     for(int fila = i+1; fila < n && fila < i + 1 + radios; fila++){

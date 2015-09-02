@@ -12,7 +12,7 @@ Sistema::Sistema(double r_i,
   m_mas_uno_ = m_mas_uno;
   r_i_ = r_i;
   r_e_ = r_e;
-  delta_r = (r_e-r_i)/m_mas_uno;
+  delta_r = (r_e-r_i)/(m_mas_uno - 1);
 
   //std::cerr << "Armando el sistema... " << std::flush;
   
@@ -23,7 +23,7 @@ Sistema::Sistema(double r_i,
   }
 
   // Precomputo varias ctes 
-  double d_r = (r_e - r_i) / (m_mas_uno -1);  // delta r
+  double d_r = delta_r;                       // delta r
   double qd_r = d_r * d_r;                    // (delta r)²
   double iqd_r = 1/qd_r;                      // 1/(delta r)²
   double d_theta = (2*M_PI) / n;              // delta theta
