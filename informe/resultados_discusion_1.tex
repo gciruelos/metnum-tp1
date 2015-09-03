@@ -5,21 +5,20 @@
 %Una vez obtenidas todas las temperaturas del sistema buscamos por cada ángulo del horno entre que dos puntos debería estar la temperatura buscada de la isoterma. Una vez localizados estos puntos suponemos que el crecimiento de la temperatura es lineal, lo cual no necesariamente es cierto pero si se toman puntos suficientemente cercanos el error es ínfimo, a partir de esta suposición podemos fácilmente plantear la ecuación de una recta que pasa por los dos puntos que conocemos y deducir de esto donde debería estar el punto que tiene la temperatura que nos interesa.
 
 \subsection{Criterios de análisis para la isoterma}
- Para tener una referencia a partir de la cual decidir si el horno podía llegar a estar en peligro o no, decidimos utilizar tres criterios clásicos, el promedio, la mediana y el máximo, ya que cada uno presenta ciertos aspectos útiles.
+ Para tener una referencia a partir de la cual decidir si el horno podía llegar a estar en peligro o no, decidimos utilizar tres criterios clásicos: el promedio, la mediana y el máximo, ya que cada uno presenta ciertos aspectos útiles.
  
   La media o promedio permite tener una idea general de los valores que tiene la isoterma, permitiendo darnos una idea básica de que tantos ángulos o con que tanta intensidad están superando el umbral, como desventaja presenta problemas al haber outliers en las mediciones de temperatura lo cual puede distorsionar la medición.
  
-  La mediana permite solucionar el problema previo, medidas que estén fuera de lugar respecto de las que aparezcan por mayoría no afectaran el resultado final y se obtendrá una idea mas clara del valor que se esta teniendo mayormente mientras que los valores esten dentro de cierto rango acotado.
+  La mediana permite solucionar el problema previo por su mayor robustez; medidas que estén fuera de lugar respecto de las que aparezcan por mayoría no afectarán el resultado final y se obtendrá una idea más clara del valor que se está teniendo mayormente mientras que los valores estén dentro de cierto rango acotado.
   
    El máximo permite ver picos que podrían pasar desapercibidos viendo únicamente la media o mediana pero como desventaja se pierden tendencias generales y los outliers lo afectan en gran medida.
 
-Una vez escogidos estos criterios de análisis lo que hicimos fue para una instancia de isoterma dada ver si al calcular el promedio, mediana o máximo alguno supera cierto umbral escogido, de suceder esto entonces se dirá que el horno esta en peligro. Para elegir el umbral se aconseja basarse en casos previos de hornos de características similares que sufrieron daños, a partir de esto estudiar la isoterma en esos casos con los criterios establecidos previamente y deducir valores adecuados dentro de los cuales sea recomendable trabajar.
+Una vez escogidos estos criterios de análisis lo que hicimos fue, para una instancia de isoterma dada, ver si al calcular el promedio, mediana o máximo alguno supera cierto umbral escogido. De suceder esto entonces se dirá que el horno esta en peligro. Para elegir el umbral se aconseja basarse en casos previos de hornos de características similares que sufrieron daños, a partir de esto estudiar la isoterma en esos casos con los criterios establecidos previamente y deducir valores adecuados dentro de los cuales sea recomendable trabajar.
 
 \subsection{Relación entre granularidad y precisión en el calculo de la isoterma}
-A través de una serie de experimentos buscamos estudiar que factores contribuyen a una mayor precisión en el cálculo de la posición de la isoterma. Logrando así una predicción mas fiable del peligro en el que puede llegar a estar el horno y sin perder el tiempo con cálculos innecesarios.
+A través de una serie de experimentos buscamos estudiar que factores contribuyen a una mayor precisión en el cálculo de la posición de la isoterma. Logrando así una predicción más fiable del peligro en el que puede llegar a estar el horno y sin perder el tiempo con cálculos innecesarios.
 
-
-Al realizar los experimentos nos interesamos en estudiar como la granularidad afectaba la aproximación precisa de la isoterma, para así poder estar seguros si el horno estaba o no en peligro. Para hacer esto separamos los experimentos en dos, primero estudiamos que pasaba cuando utilizábamos una mayor cantidad de ángulos y luego lo mismo para los radios.
+Al realizar los experimentos nos interesamos en estudiar como la granularidad afectaba la precisión de la estimación de la isoterma, para así poder estar seguros si el horno estaba o no en peligro. Para hacer esto separamos los experimentos en dos, primero estudiamos qué pasaba cuando utilizábamos una mayor cantidad de ángulos y luego lo mismo para los radios.
 
 En este documento presentamos las imágenes mas representativas de nuestra investigación pero para una mayor profundización se puede visitar el link de \ref{sec:links}, la segunda sección del apéndice, donde están todos nuestros experimentos sobre isotermas.
 

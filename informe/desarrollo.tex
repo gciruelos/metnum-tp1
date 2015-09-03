@@ -12,7 +12,7 @@ De aquí en adelante, si no se aclara otra cosa, se asumen las siguientes conven
 A partir de la ecuación del calor de Laplace y las discretizaciones de las derivadas parciales dadas en el enunciado del presente trabajo práctico, se puede obtener un sistema de ecuaciones donde las soluciones son las temperaturas en los puntos de la discretización. 
 Es decir que el problema de hallar la isoterma se reduce a dos sub-problemas: el primero es resolver efectivamente el sistema planteado, mientras que el segundo consiste en usar las temperaturas halladas para estimar la posición de la isoterma.
 
-Para resolver el sistema haremos uso de los métodos de eliminación gaussiana sin pivoteo y la factorización LU (además de los algoritmos conocidos como \emph{backward substitution} y \emph{forward substitution}). Como estos métodos son ampliamente usados y conocidos, no creemos necesario reexplicarlos aquí. Sin embargo, para una explicación en detalle sobre estos métodos sugerimos consultar \cite[Cap 5.3]{dahlquist}.
+Para resolver el sistema haremos uso de los métodos de eliminación gaussiana sin pivoteo y la factorización LU (además de los algoritmos conocidos como \emph{backward substitution} y \emph{forward substitution}, que son utilizados por estos). Como estos métodos son ampliamente usados y conocidos, no creemos necesario reexplicarlos aquí. Sin embargo, para una explicación en detalle sobre estos métodos sugerimos consultar \cite[Cap 5.3]{dahlquist}.
 
 Además, contrastaremos la eficiencia de estos métodos ante distintas situaciones. El hecho de que siempre se puedan aplicar estos métodos a la matriz del sistema se prueba en el apéndice de este informe.  
 
@@ -144,7 +144,7 @@ Para realizar la siguiente observación primero veamos un ejemplo concreto. Cons
   \right.
 \end{equation}
 
-Ahora escribamos la matriz asociada a (\ref{ej16x16}) es \vspace{1em}
+Ahora escribamos la matriz asociada a (\ref{ej16x16}) \vspace{1em}
 
 \setcounter{MaxMatrixCols}{16}
 \begin{center}
@@ -241,7 +241,7 @@ La interfaz de Sistema provee las siguientes operaciones:\footnote{Cuando se esc
 
 Pasemos a detallar los métodos que usamos para la experimentación.
 
-En cuanto a la experimentación en lo que concierne al comportamiento de los resultados del programa cuando se cambian las discretizaciones, podemos decir que tuvimos muchos intentos hasta obtener el resultado deseado. De hecho, la experimentación extensiva que realizamos nos perimitió detectar un pequeño bug del código que no se hacía notar en los tests de la cátedra.
+En cuanto a la experimentación en lo que concierne al comportamiento de los resultados del programa cuando se cambian las discretizaciones, podemos decir que tuvimos muchos intentos hasta obtener el resultado deseado. De hecho, la experimentación extensiva que realizamos nos permitió detectar un pequeño bug del código que no se hacía notar en los tests de la cátedra.
 
 Para evaluar el comportamiento de los resultados, diseñamos configuraciones de sistemas que varían lo más posible cuando se cambia la discretización, como se verá en los resultados y la discusión.
 
