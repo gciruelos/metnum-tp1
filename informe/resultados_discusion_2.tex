@@ -20,7 +20,7 @@ Queremos que las dimensiones crezcan linealmente para que los resultados se enti
 \begin{minipage}{0.48\textwidth}
   \centering
     \includegraphics[width=1\textwidth]{imgs/tiempos_vanilla_angulos.png}
-  \caption{\footnotesize{Tiempo tomado por la nuestra, implementación de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de radios está fija en 40 y la de ángulos se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
+  \caption{\footnotesize{Tiempo tomado por nuestra implementación de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de radios está fija en 40 y la de ángulos se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
   \label{fig:tiempo1}
 \end{minipage}%
 \hspace{0.03\textwidth}
@@ -34,7 +34,7 @@ Queremos que las dimensiones crezcan linealmente para que los resultados se enti
 
 
 
-Como se ve en las figuras \ref{fig:tiempo1} y \ref{fig:tiempo2}, las performances entre las implementaciones son realmente similares. También puede observarse algo que nos llamó la atención, que es que el método por eliminación gaussiana tuvo consistentemente peor performance que LU, contradiciendo parcialmente el análisis a priori. Sin embargo, la diferencia es mínima: siempre menor al 3\%.
+Como se ve en las figuras \ref{fig:tiempo1} y \ref{fig:tiempo2}, las performances entre las implementaciones son realmente similares. También puede observarse algo que nos llamó la atención, que es que el método por eliminación gaussiana tuvo consistentemente peor performance que LU, contradiciendo parcialmente el análisis \emph{a priori}. Sin embargo, la diferencia es mínima: siempre menor al 3\%.
 
 Por esta razón no creemos que sea algo importante a tener en cuenta, y podríamos atribuirlo a optimizaciones del compilador, dado que los códigos son realmente parecidos (de hecho hicimos nuestra implementación de la factorización LU sobre nuestra implementación de eliminación gaussiana), y las partes que son diferentes le agregan complejidad a la factorización LU.
 
@@ -78,7 +78,7 @@ Debido a esto, esperamos que cueste mucho mas aumentar la granularidad con respe
 \begin{minipage}{0.48\textwidth}
   \centering
     \includegraphics[width=1\textwidth]{imgs/tiempos_opt_radios.png}
-  \caption{\footnotesize{Tiempo tomado por la nuestra implementación optimizada de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de radios está fija en 40 y la de ángulos se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
+  \caption{\footnotesize{Tiempo tomado por nuestra implementación optimizada de eliminación gaussiana y de factorización LU para resolver el problema. La granularidad de radios está fija en 40 y la de ángulos se indica en el eje $x$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
   \label{fig:tiempoopt1}
 \end{minipage}%
 \hspace{0.03\textwidth}
