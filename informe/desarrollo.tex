@@ -10,28 +10,29 @@ De aquí en adelante, si no se aclara otra cosa, se asumen las siguientes conven
 \subsection{Métodos numéricos usados}
 \label{sec:metodos}
 A partir de la ecuación del calor de Laplace y las discretizaciones de las derivadas parciales dadas en el enunciado del presente trabajo práctico, se puede obtener un sistema de ecuaciones donde las soluciones son las temperaturas en los puntos de la discretización. 
-Es decir que el problema de hallar la isoterma se reduce a dos sub-problemas: el primero es resolver efectivamente el sistema planteado, mientras que el segundo consiste en usar las temperaturas halladas para estimar la posición de la isoterma.\\
-Para resolver el sistema haremos uso de los métodos de eliminación gaussiana y la factorización LU, para luego poder contrastar su eficiencia ante distintas situaciones. Adicionalmente, realizaremos una variación de cada método para aprovechar una de las características propias de la matriz del sistema.\\
+Es decir que el problema de hallar la isoterma se reduce a dos sub-problemas: el primero es resolver efectivamente el sistema planteado, mientras que el segundo consiste en usar las temperaturas halladas para estimar la posición de la isoterma.
+
+Para resolver el sistema haremos uso de los métodos de eliminación gaussiana sin pivoteo y la factorización LU\footnote{Para una explicación en detalle sobre estos métodos sugerimos consultar \cite{dahlquist}, ch. 5.3}, para luego poder contrastar su eficiencia ante distintas situaciones. El hecho de que siempre se puedan aplicar estos métodos a la matriz del sistema se prueba en el apéndice de este informe.  Adicionalmente, realizaremos una optimización de dichos métodos aprovechando una propiedad importante que cumplirá la matriz: ser banda (veremos la validez de esta afirmación en el apartado siguiente). Básicamente como conoceremos el ancho de la banda inferior de la matriz, al realizar un paso de la eliminación gaussiana no será necesario recorrer todas las filas para colocar 0's debajo del elemento de la diagonal, sino que bastará con poner 0's hasta alcanzar la banda (luego, por definición sabemos que debajo de esta son todos 0's).
+
 Para hallar la posición de la isoterma (de temperatura $t_{iso}$), dado un ángulo $\theta_j$ de la discretización, lo que haremos es buscar dos radios, $r_k$ y $r_{k+1}$, tales que $t_{k+1,j} \leq t_{iso} \leq t_{k, j}$. A partir de estos dos valores, fácilmente podemos realizar un ajuste lineal considerando la recta de pendiente $m = \dfrac{t_{k,j}-t_{k+1,j}}{\Delta r}$ que pasa por $(r_k,t_{k,j})$ y $(r_{k+1}, t_{k+1,j})$. Es decir la recta
 
 \begin{equation*}
 y = m \times (x - r_{k+1}) + t_{k,j}
 \end{equation*}
-
 nos da una aproximación del valor de la temperatura en el punto que está a distancia $x$ del centro. Como a nosotros lo que nos interesa es la inversa de esta función (dada la temperatura queremos saber a que distancia del centro se encuentra) despejamos y obtenemos 
 
 \begin{equation}
 x = \dfrac{ y-t_{k,j} } {m} + r_{k+1}
 \end{equation}
 
-Luego, si queremos obtener la posición de la isoterma solo debemos reemplazar $y$ por el valor de la isoterma.
+Luego, si queremos obtener la posición de la isoterma solo debemos reemplazar $y$ por el valor de la misma.
 
   
 \subsection{Armado del sistema de ecuaciones y su matriz asociada}
 \label{sec:armado-sistema}
-Tenemos un sistema con $n\times(m+1)$ incógnitas.
+Queremos armar un sistema de ecuaciones que nos permita hallar los valores de la temperatura en los puntos de nuestra discretización.
 
-Primero contamos con $n$ variables, los $t_{0,j}$ con $j = 0,1,\hdots, n-1$ (es decir, las temperaturas interiores), cuyos valores conocemos pues nos son dados como inputs. Lo mismo sucede con $t_{m, j}$ para $j = 0,1,..., n-1$ (temperaturas externas).
+Primero contamos con $n$ variables, los $t_{0,j}$ con $j = 0,1,\hdots, n-1$ (es decir, las temperaturas interiores), cuyos valores conocemos \textit{a priori} pues nos son dados como inputs. Lo mismo sucede con $t_{m, j}$ para \mbox{$j = 0,1,..., n-1$} (temperaturas externas).
 Luego, para las temperaturas interiores sabemos gracias a la función de Laplace y a la discretización de las derivadas que vale 
 
 $\dfrac{t_{k-1,j} - 2t_{k,j} + t_{k+1,j}}{(\Delta r)^2} 
@@ -67,7 +68,9 @@ Pensamos ahora el orden que le daremos a los puntos de la discretización. Este 
 	posicion(t_{k,j}) = k\times n + j
 \end{equation}
 
-La cantidad total de variables es $n\times(m+1)$ (cantidad de ángulos por cantidad de radios), y como para cada una podemos o bien plantear la ecuación \ref{eq:laplace-discreto}, o bien ya conocemos su valor, podemos armar un sistema de $n\times(m+1)$ ecuaciones lineales.
+En este sentido, la ecuación (\ref{eq:laplace-discreto}) tiene sus variables ordenadas. 
+
+La cantidad total de variables es $n\times(m+1)$ (cantidad de ángulos por cantidad de radios), y como para cada una podemos o bien plantear la ecuación (\ref{eq:laplace-discreto}), o bien ya conocemos su valor, podemos armar un sistema de $n\times(m+1)$ ecuaciones lineales.
 
 A continuación presentamos el sistema de ecuaciones: 
 
@@ -174,17 +177,17 @@ La interfaz de Matriz provee las siguientes operaciones:\footnote{Cuando se escr
 
 	\item Otras operaciones usuales: un constructor por copia, una función para imprimir la matriz, funciones que devuelven la cantidad de filas y de columnas, y un operador que permite acceder a cada elemento de la matriz (se numera a partir de 0).
 
-	\item \textbf{vector<double>} backward\_subst(\textbf{Matriz} A, \textbf{vector<double>} b): función que dada una matriz cuadrada triangular superior sin ceros en la diagonal y un vector de tamaño igual a la cantidad de columnas de la matriz, resuelve el sistema planteado mediante el algoritmo de \textit{backward substitution}.
+	\item \textbf{vector<double>} backward\_subst(\textbf{Matriz} A, \textbf{vector<double>} b): función que dada una matriz cuadrada triangular superior sin ceros en la diagonal y un vector de tamaño igual a la cantidad de filas de la matriz, resuelve el sistema planteado mediante el algoritmo de \textit{backward substitution}.
 
 	\item \textbf{vector<double>} forward\_subst(\textbf{Matriz} A, \textbf{vector<double>} b): análogo al anterior pero para matrices triangulares inferiores, resuelve el sistema usando \textit{forward substitution}.
 
-	\item \textbf{vector<double>} gaussian\_elim(\textbf{Matriz} A, \textbf{vector<double>} b)
+	\item \textbf{vector<double>} gaussian\_elim(\textbf{Matriz} A, \textbf{vector<double>} b): resuelve el sistema Ax=b usando el método de eliminación gaussiana. Primero triangula A, y luego aplica backward\_subst.
 
-	\item \textbf{pair<Matriz *, Matriz *>} LU\_fact()
+	\item \textbf{pair<Matriz *, Matriz *>} LU\_fact(\textbf{Matriz} A): si A tiene factorización LU, la función resuelve el sistema Ax=b usando este método.
 	
-	\item \textbf{vector<double>} gaussian\_elim\_banda(\textbf{vector<double>} b, \textbf{int} ancho)
+	\item \textbf{vector<double>} gaussian\_elim\_banda(\textbf{Matriz} A, \textbf{vector<double>} b, \textbf{int} w): versión optimizada de gaussian\_elim que aprovecha el hecho de que A sea banda de ancho superior e inferior w.
 	
-	\item \textbf{pair<Matriz *, Matriz *>} LU\_fact\_banda(\textbf{int} ancho)
+	\item \textbf{pair<Matriz *, Matriz *>} LU\_fact\_banda(\textbf{Matriz} A, \textbf{int} ancho): versión optimizada de LU\_fact que aprovecha el hecho de que A sea banda de ancho superior e inferior w.
 \end{itemize}
 
 \subsubsection{Sistema}
