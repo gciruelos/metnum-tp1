@@ -118,12 +118,16 @@ Por otra parte, se observa que el tiempo que le toma a la eliminación gaussiana
 
 En cuanto a las implementaciones optimizadas, esperamos que su comportamiento sea similar a los resultados anteriores.
 
+Con estas instancias, además de simplemente tomar tiempos, también guardamos los resultados y obtuvimos imágenes, a partir de las cuales armamos animaciones. Estas animaciones pueden verse en los links de YouTube de \ref{sec:links}.
+
 \begin{figure}[H]
 \centering  
  \includegraphics[width=0.6\textwidth]{imgs/tiempos_ninst_opt.png}
- \caption{\footnotesize{Tiempo tomado por la nuestra implementación optimizada de eliminación gaussiana y de factorización LU para resolver el problema para varias instancias de $n = m+1 = 30$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
+ \caption{\footnotesize{Tiempo tomado por la nuestra implementación optimizada de eliminación gaussiana y de factorización LU para resolver el problema para varias instancias de $n = m+1 = 40$. La barra principal indica el promedio, y el segmento indica la desviación standard.}}
 \label{fig:tiemponinstopt}
 \end{figure}
 
 Como se observa en la Figura \ref{fig:tiemponinstopt}, confirmamos nuestras expectativas. Se observa, al igual que antes, que la implementación optimizada de Gauss crece linealmente con respecto a la cantidad de instancias del problema entradas, al igual que la implementación de la factorización LU, sólo que esta ultima lo hace con una pendiente mucho menor.
+
+
 
